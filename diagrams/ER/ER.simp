@@ -2,7 +2,7 @@
 <sim-project version="12.79" multi-file="no" uid="simp50a985259f3144daa323f10e7731cdc0">
   <meta>
     <name>ER</name>
-    <authors />
+    <authors>Mikkel Buhl</authors>
     <description />
   </meta>
   <counters models="1">
@@ -15,7 +15,7 @@
     <entity-ids>
       <counter>
         <item-type type-id="group" type="Group" />
-        <value>211</value>
+        <value>215</value>
       </counter>
       <counter>
         <item-type type-id="erd-entity" type="Entity" />
@@ -45,7 +45,18 @@
   </counters>
   <alias-groups />
   <management uid="md-a8270cc1de4d4b46a94dbd4445035c6f" name="" task-id-sequence="0">
+    <working-schedule uid="ws-7c81f7c1e8d84e6abaa456b5f5a33aac" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
     <persons>
+      <person id="">
+        <first-name>Mikkel</first-name>
+        <last-name>Buhl</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+        <working-schedule uid="ws-d084048bcca4423296cff45e4b9cb555" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
+      </person>
       <person id="">
         <first-name>Mikkel</first-name>
         <last-name>Buhl</last-name>
@@ -88,7 +99,7 @@
       </meta>
       <abstract-items />
       <sub-models />
-      <diagram type="entity-relationship" id="p4076538e7e214ab894b6f793234f94cc_465598529" name="EntityRelationshipDiagram1" order-index="1" uid="" show-id="false" show-name="true" show-parent-name="false" name-style="local-auto-parents" show-stereotypes="true" show-tagged-values="false" show-template-parameters="true" show-fields="true" show-field-tags="true" show-empty-compartments="true" show-special-indicators="false" show-rules="true" show-attributes="true" show-attribute-visibility="true" show-operations="true" show-operation-parameters="true" show-operation-visibility="true" show-visibility-sign="true" show-nullability="true" show-sequence-number="false" show-extension-points="false" show-relationship-texts="true" show-data="true" show-description="false" show-field-description="false" auto-routed-paths="false" default-line-style="default" view-location="-758,-341">
+      <diagram type="entity-relationship" id="p4076538e7e214ab894b6f793234f94cc_465598529" name="EntityRelationshipDiagram1" order-index="1" uid="" show-id="false" show-name="true" show-parent-name="false" name-style="local-auto-parents" show-stereotypes="true" show-tagged-values="false" show-template-parameters="true" show-fields="true" show-field-tags="true" show-empty-compartments="true" show-special-indicators="false" show-rules="true" show-attributes="true" show-attribute-visibility="true" show-operations="true" show-operation-parameters="true" show-operation-visibility="true" show-visibility-sign="true" show-nullability="true" show-sequence-number="false" show-extension-points="false" show-relationship-texts="true" show-data="true" show-description="false" show-field-description="false" auto-routed-paths="false" default-line-style="default" view-location="-671,-341">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -165,7 +176,6 @@
             <entity description="" />
             <attributes>
               <attribute uid="a19f147403958471289e66070e034af46186" cid="EA028" name="Id" type="Uuid" type-id="Uuid" type-size="" foreign-key="false" primary-key="true" nullable="false" description="" default-value="" auto-increment="false" creation-date="04/11/2022 15:21:12" />
-              <attribute uid="ab1b5d727c0ad4aafa53a4ca51f231513650" cid="EA029" name="OrderId" type="Uuid" type-id="Uuid" type-size="" foreign-key="true" primary-key="false" nullable="false" description="" default-value="" auto-increment="false" creation-date="04/11/2022 15:21:46" />
               <attribute uid="af868731102ee4d619e9d3a67c9eaf525768" cid="EA030" name="ShippingAddressId" type="Uuid" type-id="Uuid" type-size="" foreign-key="true" primary-key="false" nullable="false" description="" default-value="" auto-increment="false" creation-date="04/11/2022 15:22:04" />
               <attribute uid="a9fbdb95c70c047988b23bf083d0071d7553" cid="EA031" name="Carrier" type="String" type-id="Uml.String" type-size="" foreign-key="false" primary-key="false" nullable="false" description="" default-value="" auto-increment="false" creation-date="04/11/2022 15:22:20" />
               <attribute uid="a72052509e17d495998302b504f4b0d2c520" cid="EA032" name="ShippedAt" type="DateTime" type-id="Uml.DateTime" type-size="" foreign-key="false" primary-key="false" nullable="true" description="" default-value="" auto-increment="false" creation-date="04/11/2022 15:22:36" />
