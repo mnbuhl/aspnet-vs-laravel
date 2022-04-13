@@ -5,7 +5,7 @@ namespace Orders.Domain.Models;
 public class Order : BaseEntity
 {
     public long Total { get; set; } = 0;
-    public DateTime Date { get; set; } = DateTime.Now;
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
     [ForeignKey(nameof(User))]
     public Guid UserId { get; set; }

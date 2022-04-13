@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Orders.Domain.Models;
+using Orders.Infrastructure.Data.Seed;
 
 namespace Orders.Infrastructure.Data;
 
@@ -17,10 +18,17 @@ public class AppDbContext : DbContext
     {
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        
+        
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ShippingDetails>().Navigation(s => s.ShippingAddress).AutoInclude();
-        
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<ShippingDetails>().Navigation(s => s.ShippingAddress).AutoInclude();
+        DatabaseInitializer.Seed(modelBuilder);
     }
 }
