@@ -18,4 +18,11 @@ public class Order : BaseEntity
     [ForeignKey(nameof(ShippingDetails))]
     public Guid ShippingDetailsId { get; set; }
     public ShippingDetails? ShippingDetails { get; set; }
+
+    public ICollection<OrderLine> OrderLines { get; set; } = new List<OrderLine>();
+
+    public void CalculateTotal()
+    {
+      
+    }
 }
