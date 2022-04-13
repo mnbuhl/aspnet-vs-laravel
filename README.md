@@ -1,8 +1,8 @@
 Time spent:
 
-ASP.NET: 1 hours
+ASP.NET: 2 hours
 
-Laravel: hours
+Laravel: 0 hours
 
 .NET migration commands:
 

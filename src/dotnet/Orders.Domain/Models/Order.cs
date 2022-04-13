@@ -4,7 +4,7 @@ namespace Orders.Domain.Models;
 
 public class Order : BaseEntity
 {
-    public long Total { get; set; }
+    public long Total { get; set; } = 0;
     public DateTime Date { get; set; } = DateTime.Now;
 
     [ForeignKey(nameof(User))]
@@ -23,6 +23,14 @@ public class Order : BaseEntity
 
     public void CalculateTotal()
     {
-      
+        if (OrderLines.Count <= 0)
+        {
+            return;
+        }
+
+        foreach (var line in OrderLines)
+        {
+            Total += line.Price * (100 - line.Discount) / 100;
+        }
     }
 }

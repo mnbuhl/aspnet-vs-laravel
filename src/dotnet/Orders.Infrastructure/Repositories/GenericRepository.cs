@@ -19,9 +19,9 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _context.Set<T>().FindAsync(id);
     }
 
-    public Task<T?> GetWithSpecification()
+    public async Task<T?> GetWithSpecification(ISpecification<T> spec)
     {
-        throw new NotImplementedException();
+        return await ApplySpecification(spec).FirstOrDefaultAsync();
     }
 
     public async Task<IReadOnlyList<T>> List()
@@ -29,9 +29,9 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         return await _context.Set<T>().ToListAsync();
     }
 
-    public Task<IReadOnlyList<T>> ListWithSpecification()
+    public async Task<IReadOnlyList<T>> ListWithSpecification(ISpecification<T> spec)
     {
-        throw new NotImplementedException();
+        return await ApplySpecification(spec).ToListAsync();
     }
 
     public async Task<bool> Create(T entity)
@@ -59,5 +59,15 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
         _context.Set<T>().Remove(entity);
 
         return await _context.SaveChangesAsync() > 0;
+    }
+
+    public async Task<int> Count(ISpecification<T> spec)
+    {
+        return await ApplySpecification(spec).CountAsync();
+    }
+
+    private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+    {
+        return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
     }
 }

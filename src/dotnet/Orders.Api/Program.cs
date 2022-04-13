@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Orders.Application.Interfaces;
 using Orders.Infrastructure.Data;
@@ -11,9 +12,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AppDbContext>(opt 
     => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddApiVersioning(x =>
+{
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.DefaultApiVersion = new ApiVersion(1, 0);
+    x.ReportApiVersions = true;
+});
 
 var app = builder.Build();
 
