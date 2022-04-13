@@ -11,5 +11,5 @@ public interface ISpecification<T> where T : BaseEntity
     Expression<Func<T, object>>? OrderByDescending { get; }
     int Take { get; }
     int Skip { get; }
-    bool IsPagingEnabled { get; }
+    bool IsPaginationEnabled { get; }
 }

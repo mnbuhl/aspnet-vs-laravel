@@ -23,7 +23,7 @@ public static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
             query = query.OrderByDescending(spec.OrderByDescending);
         }
 
-        if (spec.IsPagingEnabled)
+        if (spec.IsPaginationEnabled)
         {
             query = query.Skip(spec.Skip).Take(spec.Take);
         }
