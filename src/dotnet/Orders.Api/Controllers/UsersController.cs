@@ -22,6 +22,12 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserDto>> GetUser(Guid id)
     {
         var user = await _repository.Get(id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
         return Ok(user.ToDto());
     }
 
@@ -29,6 +35,12 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
     {
         var user = await _repository.GetWithSpecification(new UserByEmailWithOrdersSpec(email));
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
         return Ok(user.ToDto());
     }
 }
