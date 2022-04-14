@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Orders.Application.Dtos.Users;
 using Orders.Application.Interfaces;
+using Orders.Application.Specifications.Users;
 using Orders.Domain.Models;
 
 namespace Orders.Api.Controllers;
@@ -16,9 +18,17 @@ public class UsersController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet]
-    public async Task<ActionResult> GetUsers()
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUser(Guid id)
     {
-        return Ok();
+        var user = await _repository.Get(id);
+        return Ok(user.ToDto());
+    }
+
+    [HttpGet("email/{email}")]
+    public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
+    {
+        var user = await _repository.GetWithSpecification(new UserByEmailWithOrdersSpec(email));
+        return Ok(user.ToDto());
     }
 }

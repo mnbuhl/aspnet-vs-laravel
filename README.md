@@ -1,18 +1,20 @@
 Time spent:
 
-ASP.NET: 
+ASP.NET:
+
 ```
 Initial project setup: 1.5 hours
 Data access setup: 1 hour
 Configuring seed data: 1.5 hours
-Defining controllers: 0 hours
+Defining controllers: 1 hours
 Testing the API: 0 hours
 Deployment: 0 hours
 
-Total 4 hours
+Total 5 hours
 ```
 
 Laravel:
+
 ```
 Initial project setup: 0 hours
 Data access setup: 0 hour
