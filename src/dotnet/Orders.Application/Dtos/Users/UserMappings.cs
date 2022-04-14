@@ -21,4 +21,22 @@ public static class UserMappings
             Orders = user.Orders.Select(o => o.ToDto(false)).ToList(),
         };
     }
+
+    public static User ToDomain(this CreateUserDto userDto)
+    {
+        return new User
+        {
+            Name = userDto.Name,
+            Email = userDto.Email,
+            Phone = userDto.Phone
+        };
+    }
+
+    public static User MapUpdateDto(this User user, UpdateUserDto userDto)
+    {
+        user.Name = userDto.Name ?? user.Name;
+        user.Phone = userDto.Phone ?? user.Phone;
+
+        return user;
+    }
 }

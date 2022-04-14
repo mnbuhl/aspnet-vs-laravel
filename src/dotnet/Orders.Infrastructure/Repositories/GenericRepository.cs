@@ -37,13 +37,14 @@ public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     public async Task<bool> Create(T entity)
     {
         _context.Set<T>().Add(entity);
-        
+
         return await _context.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> Update(T entity)
     {
         _context.Entry(entity).State = EntityState.Detached;
+        entity.UpdatedAt = DateTime.UtcNow;
         _context.Set<T>().Update(entity);
 
         return await _context.SaveChangesAsync() > 0;

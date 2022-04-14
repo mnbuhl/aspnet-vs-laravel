@@ -18,8 +18,8 @@ public class UsersController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> GetUser(Guid id)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<UserDto>> Get(Guid id)
     {
         var user = await _repository.Get(id);
 
@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("email/{email}")]
-    public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
+    public async Task<ActionResult<UserDto>> GetByEmail(string email)
     {
         var user = await _repository.GetWithSpecification(new UserByEmailWithOrdersSpec(email));
 
@@ -42,5 +42,48 @@ public class UsersController : ControllerBase
         }
 
         return Ok(user.ToDto());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<UserDto>> Create(CreateUserDto userDto)
+    {
+        var user = userDto.ToDomain();
+
+        bool created = await _repository.Create(user);
+
+        if (!created)
+        {
+            return BadRequest("Failed to create user");
+        }
+
+        return CreatedAtAction("Get", new { id = user.Id }, user.ToDto());
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult> Update(Guid id, UpdateUserDto userDto)
+    {
+        var user = await _repository.Get(id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        bool updated = await _repository.Update(user.MapUpdateDto(userDto));
+
+        if (!updated)
+        {
+            return BadRequest("Failed to update user");
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        bool deleted = await _repository.Delete(id);
+
+        return deleted ? NoContent() : NotFound();
     }
 }
