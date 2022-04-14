@@ -1,4 +1,6 @@
-﻿using Orders.Application.Dtos.OrderLines;
+﻿using Orders.Application.Dtos.Addresses;
+using Orders.Application.Dtos.OrderLines;
+using Orders.Application.Dtos.ShippingDetail;
 using Orders.Application.Dtos.Users;
 using Orders.Domain.Models;
 
@@ -18,9 +20,9 @@ public static class OrderMappings
             Id = order.Id,
             Date = order.Date,
             Total = order.Total,
-            BillingAddress = order.BillingAddress,
+            BillingAddress = order.BillingAddress.ToDto(),
             OrderLines = order.OrderLines.Select(x => x.ToDto()).ToList(),
-            ShippingDetails = order.ShippingDetails,
+            ShippingDetails = order.ShippingDetails.ToDto(),
             User = includeUser ? order.User.ToDto() : null,
         };
     }

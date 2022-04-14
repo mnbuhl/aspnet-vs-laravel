@@ -19,8 +19,6 @@ public static class UserMappings
             Email = user.Email,
             Phone = user.Phone,
             Orders = user.Orders.Select(o => o.ToDto(false)).ToList(),
-            CreatedAt = user.CreatedAt,
-            UpdatedAt = user.UpdatedAt
         };
     }
 }

@@ -1,4 +1,4 @@
-﻿using Orders.Domain.Models;
+﻿using Orders.Application.Dtos.Products;
 
 namespace Orders.Application.Dtos.OrderLines;
 
@@ -8,7 +8,5 @@ public class OrderLineDto
     public long Price { get; set; }
     public int Quantity { get; set; }
     public int Discount { get; set; }
-    public Product? Product { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public ProductDto? Product { get; set; }
 }

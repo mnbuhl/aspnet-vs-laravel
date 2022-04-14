@@ -1,6 +1,7 @@
-﻿using Orders.Application.Dtos.OrderLines;
+﻿using Orders.Application.Dtos.Addresses;
+using Orders.Application.Dtos.OrderLines;
+using Orders.Application.Dtos.ShippingDetail;
 using Orders.Application.Dtos.Users;
-using Orders.Domain.Models;
 
 namespace Orders.Application.Dtos.Orders;
 
@@ -12,7 +13,7 @@ public class OrderDto
     public DateTime Date { get; set; }
 
     public UserDto? User { get; set; }
-    public ShippingDetails? ShippingDetails { get; set; }
-    public Address? BillingAddress { get; set; }
-    public ICollection<OrderLineDto> OrderLines { get; set; } = new List<OrderLineDto>();
+    public ShippingDetailsDto? ShippingDetails { get; set; }
+    public AddressDto? BillingAddress { get; set; }
+    public List<OrderLineDto?> OrderLines { get; set; } = new List<OrderLineDto?>();
 }
