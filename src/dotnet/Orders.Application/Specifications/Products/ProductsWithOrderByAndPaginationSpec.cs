@@ -4,7 +4,8 @@ namespace Orders.Application.Specifications.Products;
 
 public class ProductsWithOrderByAndPaginationSpec : BaseSpecification<Product>
 {
-    public ProductsWithOrderByAndPaginationSpec(ProductSpecParameters parameters, bool count = false) : base()
+    public ProductsWithOrderByAndPaginationSpec(ProductSpecParameters parameters, bool count = false)
+        : base(x => string.IsNullOrEmpty(parameters.Search) || x.Name.ToLower().Contains(parameters.Search))
     {
         if (count)
             return;

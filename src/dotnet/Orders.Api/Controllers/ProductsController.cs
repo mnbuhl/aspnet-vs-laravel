@@ -24,11 +24,6 @@ public class ProductsController : ControllerBase
     {
         var products = await _repository.ListWithSpecification(new ProductsWithOrderByAndPaginationSpec(parameters));
 
-        if (products.Count == 0)
-        {
-            return NotFound();
-        }
-
         int productsCount = await _repository.Count(new ProductsWithOrderByAndPaginationSpec(parameters, count: true));
 
         return Ok(new PaginatedList<ProductDto>(parameters.PageIndex, parameters.PageSize, productsCount,
