@@ -91,6 +91,12 @@ public class UsersController : ControllerBase
     {
         bool deleted = await _repository.Delete(id);
 
-        return deleted ? NoContent() : NotFound();
+        if (!deleted)
+        {
+            _logger.LogInformation("User with id {Id} not found", id);
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }
