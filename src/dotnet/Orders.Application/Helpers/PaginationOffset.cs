@@ -4,6 +4,6 @@ public static class PaginationOffset
 {
     public static (int, int) Calculate(int page, int index)
     {
-        return ((page - 1) * index, page);
+        return (page * (index - 1), page);
     }
 }

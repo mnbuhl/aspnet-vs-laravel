@@ -32,10 +32,13 @@ public class OrdersDefaultSpecification : BaseSpecification<Order>
                 AddOrderByDescending(o => o.Total);
                 break;
             case "date":
-                AddOrderBy(o => o.Date);
+                AddOrderBy(o => o.Date as DateTime?);
+                break;
+            case "-date":
+                AddOrderByDescending(o => o.Date as DateTime?);
                 break;
             default:
-                AddOrderByDescending(o => o.Date);
+                AddOrderByDescending(o => o.CreatedAt as DateTime?);
                 break;
         }
     }

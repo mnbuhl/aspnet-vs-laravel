@@ -30,4 +30,33 @@ public class OrdersController : ControllerBase
 
         return Ok(paginatedResult);
     }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<OrderDto>> Get(Guid id)
+    {
+        var order = await _repository.GetWithSpecification(new OrderWithRelationsSpec(id));
+
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(order.ToDto());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<OrderDto>> Create(CreateOrderDto orderDto)
+    {
+        var order = orderDto.ToDomain();
+        order.CalculateTotal();
+
+        bool created = await _repository.Create(order);
+
+        if (!created)
+        {
+            return BadRequest("Could not create order");
+        }
+
+        return CreatedAtAction("Get", new { id = order.Id }, order.ToDto());
+    }
 }
