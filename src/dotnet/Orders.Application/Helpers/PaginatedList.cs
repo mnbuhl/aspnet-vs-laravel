@@ -1,4 +1,4 @@
-﻿namespace Orders.Api.Helpers;
+﻿namespace Orders.Application.Helpers;
 
 public class PaginatedList<T>
 {

@@ -1,6 +1,6 @@
 ﻿namespace Orders.Application.Specifications.Products;
 
-public class ProductSpecParameters
+public class ProductsSpecParameters
 {
     private const int MaxPageSize = 50;
     private int _pageSize = 6;

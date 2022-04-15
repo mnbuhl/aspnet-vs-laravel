@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Orders.Api.Helpers;
 using Orders.Application.Dtos.Products;
+using Orders.Application.Helpers;
 using Orders.Application.Interfaces;
 using Orders.Application.Specifications.Products;
 using Orders.Domain.Models;
@@ -20,11 +20,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedList<ProductDto>>> GetAll([FromQuery] ProductSpecParameters parameters)
+    public async Task<ActionResult<PaginatedList<ProductDto>>> GetAll([FromQuery] ProductsSpecParameters parameters)
     {
-        var products = await _repository.ListWithSpecification(new ProductsWithOrderByAndPaginationSpec(parameters));
-
-        int productsCount = await _repository.Count(new ProductsWithOrderByAndPaginationSpec(parameters, count: true));
+        var products = await _repository.ListWithSpecification(new ProductsDefaultSpecification(parameters));
+        int productsCount = await _repository.Count(new ProductsDefaultSpecification(parameters, count: true));
 
         return Ok(new PaginatedList<ProductDto>(parameters.PageIndex, parameters.PageSize, productsCount,
             products.Select(x => x.ToDto()!).ToList()));
