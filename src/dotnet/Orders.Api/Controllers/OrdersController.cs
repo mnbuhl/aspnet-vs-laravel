@@ -89,4 +89,54 @@ public class OrdersController : ControllerBase
 
         return CreatedAtAction("Get", new { id = order.Id }, order.ToDto());
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var order = await _orderRepository.GetWithSpecification(new OrderWithRelationsSpec(id));
+
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        if (order.ShippingDetails?.ShippedAt != null)
+        {
+            return BadRequest("Order has already been shipped");
+        }
+
+        await _databaseTransaction.BeginTransaction();
+
+        foreach (var line in order.OrderLines)
+        {
+            var product = await _productRepository.Get(line.ProductId);
+
+            if (product == null)
+                return BadRequest("Product on order line not found");
+
+            try
+            {
+                product.UpdateQuantity(line.Quantity * -1);
+            }
+            catch (Exception e)
+            {
+                await _databaseTransaction.RollbackTransaction();
+                return BadRequest(e.Message);
+            }
+
+            await _productRepository.Update(product);
+        }
+
+        bool deleted = await _orderRepository.Delete(id);
+
+        if (!deleted)
+        {
+            await _databaseTransaction.RollbackTransaction();
+            return BadRequest("Could not delete order");
+        }
+
+        await _databaseTransaction.CommitTransaction();
+
+        return NoContent();
+    }
 }
