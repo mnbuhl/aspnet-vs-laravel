@@ -12,18 +12,23 @@ namespace Orders.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class OrdersController : ControllerBase
 {
-    private readonly IRepository<Order> _repository;
+    private readonly IDatabaseTransaction _databaseTransaction;
+    private readonly IRepository<Order> _orderRepository;
+    private readonly IRepository<Product> _productRepository;
 
-    public OrdersController(IRepository<Order> repository)
+    public OrdersController(IRepository<Order> orderRepository, IRepository<Product> productRepository,
+        IDatabaseTransaction databaseTransaction)
     {
-        _repository = repository;
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+        _databaseTransaction = databaseTransaction;
     }
 
     [HttpGet]
     public async Task<ActionResult<PaginatedList<OrderDto>>> GetAll([FromQuery] OrdersSpecParameters parameters)
     {
-        var orders = await _repository.ListWithSpecification(new OrdersDefaultSpecification(parameters));
-        int ordersCount = await _repository.Count(new OrdersDefaultSpecification(parameters, count: true));
+        var orders = await _orderRepository.ListWithSpecification(new OrdersDefaultSpecification(parameters));
+        int ordersCount = await _orderRepository.Count(new OrdersDefaultSpecification(parameters, count: true));
 
         var paginatedResult = new PaginatedList<OrderDto>(parameters.PageIndex, parameters.PageSize, ordersCount,
             orders.Select(o => o.ToDto()!).ToList());
@@ -34,7 +39,7 @@ public class OrdersController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<OrderDto>> Get(Guid id)
     {
-        var order = await _repository.GetWithSpecification(new OrderWithRelationsSpec(id));
+        var order = await _orderRepository.GetWithSpecification(new OrderWithRelationsSpec(id));
 
         if (order == null)
         {
@@ -50,12 +55,37 @@ public class OrdersController : ControllerBase
         var order = orderDto.ToDomain();
         order.CalculateTotal();
 
-        bool created = await _repository.Create(order);
+        await _databaseTransaction.BeginTransaction();
+
+        foreach (var line in order.OrderLines)
+        {
+            var product = await _productRepository.Get(line.ProductId);
+
+            if (product == null)
+                return BadRequest("Product on order line not found");
+
+            try
+            {
+                product.UpdateQuantity(line.Quantity);
+            }
+            catch (Exception e)
+            {
+                await _databaseTransaction.RollbackTransaction();
+                return BadRequest(e.Message);
+            }
+
+            await _productRepository.Update(product);
+        }
+
+        bool created = await _orderRepository.Create(order);
 
         if (!created)
         {
+            await _databaseTransaction.RollbackTransaction();
             return BadRequest("Could not create order");
         }
+
+        await _databaseTransaction.CommitTransaction();
 
         return CreatedAtAction("Get", new { id = order.Id }, order.ToDto());
     }
