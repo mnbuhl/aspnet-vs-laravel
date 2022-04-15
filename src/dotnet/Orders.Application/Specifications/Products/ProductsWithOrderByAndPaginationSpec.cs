@@ -2,9 +2,9 @@
 
 namespace Orders.Application.Specifications.Products;
 
-public class ProductsSpecification : BaseSpecification<Product>
+public class ProductsWithOrderByAndPaginationSpec : BaseSpecification<Product>
 {
-    public ProductsSpecification(ProductSpecParameters parameters, bool count = false) : base()
+    public ProductsWithOrderByAndPaginationSpec(ProductSpecParameters parameters, bool count = false) : base()
     {
         if (count)
             return;

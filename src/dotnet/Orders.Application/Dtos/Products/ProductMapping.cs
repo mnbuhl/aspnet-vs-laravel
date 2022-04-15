@@ -18,4 +18,25 @@ public static class ProductMapping
             AmountInStock = product.AmountInStock
         };
     }
+
+    public static Product ToDomain(this CreateProductDto productDto)
+    {
+        return new Product
+        {
+            Name = productDto.Name,
+            Description = productDto.Description,
+            Price = productDto.Price,
+            AmountInStock = productDto.AmountInStock
+        };
+    }
+
+    public static Product MapUpdateDto(this Product product, UpdateProductDto productDto)
+    {
+        product.Name = productDto.Name ?? product.Name;
+        product.Description = productDto.Description ?? product.Description;
+        product.Price = productDto.Price ?? product.Price;
+        product.AmountInStock = productDto.AmountInStock ?? product.AmountInStock;
+
+        return product;
+    }
 }
