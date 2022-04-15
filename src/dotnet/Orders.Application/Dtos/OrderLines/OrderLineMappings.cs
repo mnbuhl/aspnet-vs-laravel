@@ -15,6 +15,7 @@ public static class OrderLineMappings
             Id = orderLine.Id,
             Price = orderLine.Price,
             Quantity = orderLine.Quantity,
+            ProductId = orderLine.ProductId,
             Product = orderLine.Product.ToDto(),
             Discount = orderLine.Discount,
         };

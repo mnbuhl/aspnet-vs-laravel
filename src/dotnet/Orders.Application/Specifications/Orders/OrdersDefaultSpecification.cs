@@ -12,9 +12,14 @@ public class OrdersDefaultSpecification : BaseSpecification<Order>
             return;
         }
 
-        AddInclude(o => o.BillingAddress!);
-        AddInclude(o => o.ShippingDetails!);
+        AddInclude(o => o.BillingAddress);
+        AddInclude(o => o.ShippingDetails);
         AddInclude(o => o.OrderLines);
+
+        if (parameters.UserId == null)
+        {
+            AddInclude(o => o.User);
+        }
 
         ApplyPagination(parameters.PageSize, parameters.PageIndex);
 

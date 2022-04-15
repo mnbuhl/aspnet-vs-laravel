@@ -5,7 +5,7 @@ namespace Orders.Application.Dtos.Users;
 
 public static class UserMappings
 {
-    public static UserDto? ToDto(this User? user)
+    public static UserDto? ToDto(this User? user, bool mapOrders = true)
     {
         if (user == null)
         {
@@ -18,7 +18,7 @@ public static class UserMappings
             Name = user.Name,
             Email = user.Email,
             Phone = user.Phone,
-            Orders = user.Orders.Select(o => o.ToDto(false)).ToList(),
+            Orders = mapOrders ? user.Orders.Select(o => o.ToDto(false)).ToList() : new List<OrderDto?>(),
         };
     }
 

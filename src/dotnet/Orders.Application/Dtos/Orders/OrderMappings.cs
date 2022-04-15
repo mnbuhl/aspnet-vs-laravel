@@ -23,7 +23,7 @@ public static class OrderMappings
             BillingAddress = order.BillingAddress.ToDto(),
             OrderLines = order.OrderLines.Select(x => x.ToDto()).ToList(),
             ShippingDetails = order.ShippingDetails.ToDto(),
-            User = includeUser ? order.User.ToDto() : null,
+            User = includeUser ? order.User.ToDto(false) : null,
         };
     }
 }

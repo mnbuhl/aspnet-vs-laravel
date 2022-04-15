@@ -20,9 +20,9 @@ public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
     public int Skip { get; private set; }
     public bool IsPaginationEnabled { get; private set; }
 
-    protected void AddInclude(Expression<Func<T, object>> include)
+    protected void AddInclude(Expression<Func<T, object?>> include)
     {
-        Includes.Add(include);
+        Includes?.Add(include!);
     }
 
     protected void AddOrderBy(Expression<Func<T, object>> orderBy)

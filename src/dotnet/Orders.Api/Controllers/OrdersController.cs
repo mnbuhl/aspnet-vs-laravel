@@ -19,10 +19,15 @@ public class OrdersController : ControllerBase
         _repository = repository;
     }
 
-    // In a real system this would be for admins only
     [HttpGet]
     public async Task<ActionResult<PaginatedList<OrderDto>>> GetAll([FromQuery] OrdersSpecParameters parameters)
     {
-        return Ok();
+        var orders = await _repository.ListWithSpecification(new OrdersDefaultSpecification(parameters));
+        int ordersCount = await _repository.Count(new OrdersDefaultSpecification(parameters, count: true));
+
+        var paginatedResult = new PaginatedList<OrderDto>(parameters.PageIndex, parameters.PageSize, ordersCount,
+            orders.Select(o => o.ToDto()!).ToList());
+
+        return Ok(paginatedResult);
     }
 }
