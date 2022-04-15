@@ -7,6 +7,6 @@ public class UserByEmailWithOrdersSpec : BaseSpecification<User>
     public UserByEmailWithOrdersSpec(string email)
         : base(u => u.Email == email)
     {
-        Includes.Add(u => u.Orders);
+        AddInclude(u => u.Orders);
     }
 }

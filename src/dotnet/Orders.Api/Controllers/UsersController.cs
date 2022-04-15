@@ -60,7 +60,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult> Update(Guid id, UpdateUserDto userDto)
+    public async Task<IActionResult> Update(Guid id, UpdateUserDto userDto)
     {
         var user = await _repository.Get(id);
 
