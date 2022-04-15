@@ -20,4 +20,15 @@ public static class OrderLineMappings
             Discount = orderLine.Discount,
         };
     }
+
+    public static OrderLine ToDomain(this CreateOrderLineDto orderLineDto)
+    {
+        return new OrderLine
+        {
+            Price = orderLineDto.Price,
+            Quantity = orderLineDto.Quantity,
+            ProductId = orderLineDto.ProductId,
+            Discount = orderLineDto.Discount,
+        };
+    }
 }

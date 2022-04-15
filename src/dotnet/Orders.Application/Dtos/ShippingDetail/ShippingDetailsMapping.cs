@@ -19,4 +19,15 @@ public static class ShippingDetailsMapping
             DeliveredAt = shippingDetails.DeliveredAt
         };
     }
+
+    public static ShippingDetails ToDomain(this CreateShippingDetailsDto shippingDetailsDto)
+    {
+        return new ShippingDetails
+        {
+            Carrier = shippingDetailsDto.Carrier,
+            ShippingAddress = shippingDetailsDto.ShippingAddress?.ToDomain(),
+            ShippedAt = shippingDetailsDto.ShippedAt,
+            DeliveredAt = shippingDetailsDto.DeliveredAt
+        };
+    }
 }

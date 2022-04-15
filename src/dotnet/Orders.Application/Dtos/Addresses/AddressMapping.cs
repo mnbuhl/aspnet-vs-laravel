@@ -18,4 +18,15 @@ public static class AddressMapping
             Country = address.Country
         };
     }
+
+    public static Address ToDomain(this CreateAddressDto addressDto)
+    {
+        return new Address
+        {
+            AddressLine = addressDto.AddressLine,
+            City = addressDto.City,
+            ZipCode = addressDto.ZipCode,
+            Country = addressDto.Country
+        };
+    }
 }

@@ -26,4 +26,16 @@ public static class OrderMappings
             User = includeUser ? order.User.ToDto(false) : null,
         };
     }
+
+    public static Order ToDomain(this CreateOrderDto orderDto)
+    {
+        return new Order
+        {
+            Date = orderDto.Date,
+            UserId = orderDto.UserId,
+            BillingAddress = orderDto.BillingAddress?.ToDomain(),
+            ShippingDetails = orderDto.ShippingDetails?.ToDomain(),
+            OrderLines = orderDto.OrderLines.Select(ol => ol.ToDomain()).ToList()
+        };
+    }
 }
