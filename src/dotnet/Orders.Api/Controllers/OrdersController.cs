@@ -13,15 +13,17 @@ namespace Orders.Api.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IDatabaseTransaction _databaseTransaction;
+    private readonly ILogger<OrdersController> _logger;
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<Product> _productRepository;
 
     public OrdersController(IRepository<Order> orderRepository, IRepository<Product> productRepository,
-        IDatabaseTransaction databaseTransaction)
+        IDatabaseTransaction databaseTransaction, ILogger<OrdersController> logger)
     {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _databaseTransaction = databaseTransaction;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -43,6 +45,7 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
+            _logger.LogInformation("Order with id: {Id} not found", id);
             return NotFound();
         }
 
@@ -70,8 +73,10 @@ public class OrdersController : ControllerBase
             }
             catch (Exception e)
             {
+                _logger.LogError("Error updating product quantity of product: {Id}. Error: {Error}",
+                    product.Id, e.Message);
                 await _databaseTransaction.RollbackTransaction();
-                return BadRequest(e.Message);
+                return BadRequest("Could not update product quantity");
             }
 
             await _productRepository.Update(product);
@@ -81,6 +86,7 @@ public class OrdersController : ControllerBase
 
         if (!created)
         {
+            _logger.LogCritical("Could not create order. Rolling back transaction");
             await _databaseTransaction.RollbackTransaction();
             return BadRequest("Could not create order");
         }
@@ -97,11 +103,14 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
+            _logger.LogInformation("Order with id: {Id} not found and could therefore not be deleted", id);
             return NotFound();
         }
 
         if (order.ShippingDetails?.ShippedAt != null)
         {
+            _logger.LogInformation("Order with id: {Id} has already been shipped and could therefore not be deleted",
+                id);
             return BadRequest("Order has already been shipped");
         }
 
@@ -112,7 +121,10 @@ public class OrdersController : ControllerBase
             var product = await _productRepository.Get(line.ProductId);
 
             if (product == null)
+            {
+                _logger.LogInformation("Product on order line not found");
                 return BadRequest("Product on order line not found");
+            }
 
             try
             {
@@ -120,8 +132,10 @@ public class OrdersController : ControllerBase
             }
             catch (Exception e)
             {
+                _logger.LogInformation("Failed to update product quantity of product: {Id}. Error: {Error}",
+                    product.Id, e.Message);
                 await _databaseTransaction.RollbackTransaction();
-                return BadRequest(e.Message);
+                return BadRequest("Could not update product quantity");
             }
 
             await _productRepository.Update(product);
@@ -131,6 +145,7 @@ public class OrdersController : ControllerBase
 
         if (!deleted)
         {
+            _logger.LogCritical("Could not delete order. Rolling back transaction");
             await _databaseTransaction.RollbackTransaction();
             return BadRequest("Could not delete order");
         }

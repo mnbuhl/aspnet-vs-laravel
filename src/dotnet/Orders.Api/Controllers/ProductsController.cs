@@ -12,11 +12,13 @@ namespace Orders.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductsController : ControllerBase
 {
+    private readonly ILogger<ProductsController> _logger;
     private readonly IRepository<Product> _repository;
 
-    public ProductsController(IRepository<Product> repository)
+    public ProductsController(IRepository<Product> repository, ILogger<ProductsController> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -35,7 +37,10 @@ public class ProductsController : ControllerBase
         var product = await _repository.Get(id);
 
         if (product == null)
+        {
+            _logger.LogInformation("Product with id {Id} not found", id);
             return NotFound();
+        }
 
         return Ok(product.ToDto());
     }
@@ -48,7 +53,10 @@ public class ProductsController : ControllerBase
         bool created = await _repository.Create(product);
 
         if (!created)
+        {
+            _logger.LogInformation("Failed to create Product");
             return BadRequest("Failed to create product");
+        }
 
         return CreatedAtAction(nameof(Get), new { id = product.Id }, product.ToDto());
     }
@@ -60,6 +68,7 @@ public class ProductsController : ControllerBase
 
         if (product == null)
         {
+            _logger.LogInformation("Product with id {Id} not found", id);
             return NotFound();
         }
 
@@ -67,6 +76,7 @@ public class ProductsController : ControllerBase
 
         if (!updated)
         {
+            _logger.LogInformation("Product with id {Id} not updated", product.Id);
             return BadRequest("Failed to update product");
         }
 

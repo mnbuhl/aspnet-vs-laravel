@@ -11,11 +11,13 @@ namespace Orders.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly ILogger<UsersController> _logger;
     private readonly IRepository<User> _repository;
 
-    public UsersController(IRepository<User> repository)
+    public UsersController(IRepository<User> repository, ILogger<UsersController> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     [HttpGet("{id:guid}")]
@@ -25,6 +27,7 @@ public class UsersController : ControllerBase
 
         if (user == null)
         {
+            _logger.LogInformation("User with id {Id} not found", id);
             return NotFound();
         }
 
@@ -38,6 +41,7 @@ public class UsersController : ControllerBase
 
         if (user == null)
         {
+            _logger.LogInformation("User with email {Email} not found", email);
             return NotFound();
         }
 
@@ -53,6 +57,7 @@ public class UsersController : ControllerBase
 
         if (!created)
         {
+            _logger.LogInformation("Failed to create User");
             return BadRequest("Failed to create user");
         }
 
@@ -66,6 +71,7 @@ public class UsersController : ControllerBase
 
         if (user == null)
         {
+            _logger.LogInformation("User with id {Id} not found", id);
             return NotFound();
         }
 
@@ -73,6 +79,7 @@ public class UsersController : ControllerBase
 
         if (!updated)
         {
+            _logger.LogInformation("User with id {Id} not updated", user.Id);
             return BadRequest("Failed to update user");
         }
 
