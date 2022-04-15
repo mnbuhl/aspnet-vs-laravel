@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Orders.Application.Helpers;
 using Orders.Application.Interfaces;
 using Orders.Domain.Models;
 
@@ -34,10 +35,12 @@ public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
         OrderByDescending = orderByDescending;
     }
 
-    protected void ApplyPagination(int skip, int take)
+    protected void ApplyPagination(int size, int index)
     {
-        Skip = skip;
-        Take = take;
+        var paging = PaginationOffset.Calculate(size, index);
+
+        Skip = paging.Item1;
+        Take = paging.Item2;
         IsPaginationEnabled = true;
     }
 }

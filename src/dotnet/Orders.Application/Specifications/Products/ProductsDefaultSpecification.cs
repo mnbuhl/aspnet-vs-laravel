@@ -1,5 +1,4 @@
-﻿using Orders.Application.Helpers;
-using Orders.Domain.Models;
+﻿using Orders.Domain.Models;
 
 namespace Orders.Application.Specifications.Products;
 
@@ -11,8 +10,7 @@ public class ProductsDefaultSpecification : BaseSpecification<Product>
         if (count)
             return;
 
-        var paging = PaginationOffset.Calculate(parameters.PageSize, parameters.PageIndex);
-        ApplyPagination(paging.Item1, paging.Item2);
+        ApplyPagination(parameters.PageSize, parameters.PageIndex);
 
         switch (parameters.Sort)
         {
