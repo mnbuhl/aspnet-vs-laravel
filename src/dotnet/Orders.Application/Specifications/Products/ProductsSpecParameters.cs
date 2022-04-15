@@ -1,4 +1,6 @@
-﻿namespace Orders.Application.Specifications.Products;
+﻿using Orders.Application.Helpers;
+
+namespace Orders.Application.Specifications.Products;
 
 public class ProductsSpecParameters
 {
@@ -18,9 +20,10 @@ public class ProductsSpecParameters
     public string? Sort
     {
         get => _sort;
-        set => _sort = new[] { "name", "-name", "price", "-price", "created_at", "-created_at" }.Contains(value)
-            ? value?.ToLower()
-            : throw new ArgumentException("Invalid sort option", nameof(value));
+        set => _sort = OrderByValidator.Validate(new[]
+        {
+            "name", "-name", "price", "-price", "created_at", "-created_at"
+        }, value);
     }
 
     public string? Search

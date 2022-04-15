@@ -17,5 +17,21 @@ public class OrdersDefaultSpecification : BaseSpecification<Order>
         AddInclude(o => o.OrderLines);
 
         ApplyPagination(parameters.PageSize, parameters.PageIndex);
+
+        switch (parameters.Sort)
+        {
+            case "total":
+                AddOrderBy(o => o.Total);
+                break;
+            case "-total":
+                AddOrderByDescending(o => o.Total);
+                break;
+            case "date":
+                AddOrderBy(o => o.Date);
+                break;
+            default:
+                AddOrderByDescending(o => o.Date);
+                break;
+        }
     }
 }

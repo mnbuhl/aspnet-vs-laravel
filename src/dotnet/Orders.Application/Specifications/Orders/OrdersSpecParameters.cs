@@ -1,4 +1,6 @@
-﻿namespace Orders.Application.Specifications.Orders;
+﻿using Orders.Application.Helpers;
+
+namespace Orders.Application.Specifications.Orders;
 
 public class OrdersSpecParameters
 {
@@ -17,9 +19,7 @@ public class OrdersSpecParameters
     public string? Sort
     {
         get => _sort;
-        set => _sort = new[] { "total", "-total", "date", "-date" }.Contains(value)
-            ? value?.ToLower()
-            : throw new ArgumentException("Invalid sort option", nameof(value));
+        set => _sort = OrderByValidator.Validate(new[] { "total", "-total", "date", "-date" }, value);
     }
 
     public Guid? UserId { get; set; }
