@@ -16,9 +16,14 @@ public class BackgroundJobs : BackgroundService
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        // Only start the timer if the app is running in the Production environment
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Production")
+            return Task.CompletedTask;
+
         _logger.LogInformation("Background jobs started");
-        // Starts a timer that fires after 30 minutes and then every 1 hour after that
-        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.FromMinutes(30), TimeSpan.FromHours(1)));
+
+        // Starts a timer that fires after 15 minutes and then every 1 hour after that
+        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.FromMinutes(15), TimeSpan.FromHours(1)));
 
         return Task.CompletedTask;
     }
