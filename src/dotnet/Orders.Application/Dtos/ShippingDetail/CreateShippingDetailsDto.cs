@@ -11,6 +11,6 @@ public class CreateShippingDetailsDto
     public DateTime? ShippedAt { get; set; }
     public DateTime? DeliveredAt { get; set; }
 
-    [Required]
+    public Guid ShippingAddressId { get; set; }
     public CreateAddressDto? ShippingAddress { get; set; }
 }

@@ -33,6 +33,7 @@ public static class OrderMappings
         {
             Date = orderDto.Date,
             UserId = orderDto.UserId,
+            BillingAddressId = orderDto.BillingAddressId,
             BillingAddress = orderDto.BillingAddress?.ToDomain(),
             ShippingDetails = orderDto.ShippingDetails?.ToDomain(),
             OrderLines = orderDto.OrderLines.Select(ol => ol.ToDomain()).ToList()

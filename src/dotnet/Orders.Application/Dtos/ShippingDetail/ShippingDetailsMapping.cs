@@ -25,6 +25,7 @@ public static class ShippingDetailsMapping
         return new ShippingDetails
         {
             Carrier = shippingDetailsDto.Carrier,
+            ShippingAddressId = shippingDetailsDto.ShippingAddressId,
             ShippingAddress = shippingDetailsDto.ShippingAddress?.ToDomain(),
             ShippedAt = shippingDetailsDto.ShippedAt,
             DeliveredAt = shippingDetailsDto.DeliveredAt
