@@ -17,7 +17,8 @@ public class BackgroundJobs : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Background jobs started");
-        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.Zero, TimeSpan.FromMinutes(30)));
+        // Starts a timer that fires after 30 minutes and then every 1 hour after that
+        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.FromMinutes(30), TimeSpan.FromHours(1)));
 
         return Task.CompletedTask;
     }
