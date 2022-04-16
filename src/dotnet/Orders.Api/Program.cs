@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Orders.Api.Jobs;
 using Orders.Application.Interfaces;
 using Orders.Infrastructure.Data;
 using Orders.Infrastructure.Repositories;
@@ -29,6 +30,8 @@ builder.Services.AddApiVersioning(x =>
     x.DefaultApiVersion = new ApiVersion(1, 0);
     x.ReportApiVersions = true;
 });
+
+builder.Services.AddBackgroundJobs();
 
 var app = builder.Build();
 
