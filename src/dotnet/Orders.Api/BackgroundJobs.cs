@@ -17,7 +17,7 @@ public class BackgroundJobs : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Background jobs started");
-        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.Zero, TimeSpan.FromMinutes(1)));
+        _timers.Add(new Timer(CheckShippingStatus, null, TimeSpan.Zero, TimeSpan.FromMinutes(30)));
 
         return Task.CompletedTask;
     }

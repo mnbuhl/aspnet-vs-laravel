@@ -9,11 +9,11 @@ public class CarrierService : ICarrierService
 
     public bool IsOrderShipped(Guid orderId)
     {
-        return Random.Next(0, orderId.ToString().Length) > orderId.ToString().Length / 2;
+        return Random.Next(0, orderId.ToString().Length) < orderId.ToString().Length / 4;
     }
 
     public bool IsOrderDelivered(Guid orderId)
     {
-        return Random.Next(0, orderId.ToString().Length) > orderId.ToString().Length / 2;
+        return Random.Next(0, orderId.ToString().Length) < orderId.ToString().Length / 4;
     }
 }
