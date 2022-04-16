@@ -14,6 +14,7 @@ public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
 
     public Expression<Func<T, bool>>? Criteria { get; }
     public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
+    public List<string> ThenIncludes { get; } = new List<string>();
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
     public int Take { get; private set; }
@@ -22,7 +23,13 @@ public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
 
     protected void AddInclude(Expression<Func<T, object?>> include)
     {
-        Includes?.Add(include!);
+        Includes.Add(include!);
+    }
+
+    // Can only be done with string path when using ThenInclude to avoid dependency on EF Core
+    protected void AddThenInclude(string thenIncludePath)
+    {
+        ThenIncludes.Add(thenIncludePath);
     }
 
     protected void AddOrderBy(Expression<Func<T, object>> orderBy)
