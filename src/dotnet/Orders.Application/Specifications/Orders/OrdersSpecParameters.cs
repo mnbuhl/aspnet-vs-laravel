@@ -19,7 +19,7 @@ public class OrdersSpecParameters
     public string? Sort
     {
         get => _sort;
-        set => _sort = OrderByValidator.Validate(new[] { "total", "-total", "date", "-date" }, value);
+        set => _sort = OrderByValidator.Validate(new[] { "total", "-total", "date", "-date" }, value!);
     }
 
     public Guid? UserId { get; set; }

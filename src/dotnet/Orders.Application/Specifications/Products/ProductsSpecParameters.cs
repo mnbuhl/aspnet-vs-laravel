@@ -23,7 +23,7 @@ public class ProductsSpecParameters
         set => _sort = OrderByValidator.Validate(new[]
         {
             "name", "-name", "price", "-price", "created_at", "-created_at"
-        }, value);
+        }, value!);
     }
 
     public string? Search
