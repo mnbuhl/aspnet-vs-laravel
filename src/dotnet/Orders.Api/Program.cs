@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Orders.Api.Jobs;
@@ -6,6 +5,7 @@ using Orders.Api.Services;
 using Orders.Application.Interfaces;
 using Orders.Infrastructure.Data;
 using Orders.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
 
 namespace Orders.Api;
 
@@ -15,14 +15,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+        // Add services to the container.
 
         builder.Services.AddControllers().AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -44,7 +44,11 @@ public class Program
 
         var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.Database.Migrate();
+
+        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

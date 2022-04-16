@@ -9,9 +9,9 @@ Configuring seed data: 1.5 hours
 Defining controllers: 6.5 hours
 Background jobs: 1 hours
 Testing the API: 3 hours
-Deployment: 0 hours
+Deployment: 1.5 hours
 
-Total 14.5 hours
+Total 16 hours
 ```
 
 Laravel:
