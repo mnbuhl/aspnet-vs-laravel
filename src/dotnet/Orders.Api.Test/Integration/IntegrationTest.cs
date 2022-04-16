@@ -40,16 +40,15 @@ public class IntegrationTest : IDisposable
 
         using var scope = appFactory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        //context?.Database.Migrate();
-        context?.Database.EnsureCreated();
+        context.Database.EnsureCreated();
     }
 
     public void Dispose()
     {
         using var scope = _serviceProvider.CreateScope();
 
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        dbContext?.Database.EnsureDeleted();
+        context.Database.EnsureDeleted();
     }
 }
