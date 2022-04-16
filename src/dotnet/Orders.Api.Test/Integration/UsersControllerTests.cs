@@ -7,8 +7,11 @@ using Xunit;
 
 namespace Orders.Api.Test.Integration;
 
+[Collection("Integration")]
 public class UsersControllerTests : IntegrationTest
 {
+    private static readonly Random Random = new Random();
+
     [Fact]
     public async Task GetUser_WithExistingId_Returns200Ok()
     {
@@ -128,7 +131,13 @@ public class UsersControllerTests : IntegrationTest
 
     private async Task<UserDto> GetUser()
     {
-        var response = await Messenger.Get<UserDto>("users/email/user20@email.com");
-        return response.Data;
+        var response = await Messenger.Get<UserDto>($"users/email/user{Random.Next(0, 100)}@email.com");
+
+        if (response.Data.Orders.Count != 0)
+        {
+            return response.Data;
+        }
+
+        return await GetUser();
     }
 }

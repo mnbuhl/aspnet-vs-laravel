@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Orders.Api.Test.Integration;
 
+[Collection("Integration")]
 public class ProductsControllerTests : IntegrationTest
 {
     [Fact]

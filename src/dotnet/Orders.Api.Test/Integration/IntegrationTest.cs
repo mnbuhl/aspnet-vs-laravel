@@ -4,7 +4,9 @@ using HttpMessenger.Service;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Orders.Application.Interfaces;
 using Orders.Infrastructure.Data;
+using DatabaseTransaction = Orders.Api.Test.Mocks.DatabaseTransaction;
 
 namespace Orders.Api.Test.Integration;
 
@@ -23,12 +25,21 @@ public class IntegrationTest : IDisposable
                     var contextDescriptor = services.FirstOrDefault(x =>
                         x.ServiceType == typeof(DbContextOptions<AppDbContext>));
 
+                    var transactionDescriptor =
+                        services.FirstOrDefault(x => x.ServiceType == typeof(IDatabaseTransaction));
+
                     if (contextDescriptor != null)
                     {
                         services.Remove(contextDescriptor);
                     }
 
+                    if (transactionDescriptor != null)
+                    {
+                        services.Remove(transactionDescriptor);
+                    }
+
                     services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("TestDb"));
+                    services.AddScoped<IDatabaseTransaction, DatabaseTransaction>();
                 });
             });
 
