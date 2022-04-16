@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Domain", "Orders.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Infrastructure", "Orders.Infrastructure\Orders.Infrastructure.csproj", "{880CF353-01EA-44D6-8755-E96DC433DA7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Api.Test", "Orders.Api.Test\Orders.Api.Test.csproj", "{D1F8CCC7-AA47-4284-B128-1CE73C71A197}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{880CF353-01EA-44D6-8755-E96DC433DA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{880CF353-01EA-44D6-8755-E96DC433DA7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{880CF353-01EA-44D6-8755-E96DC433DA7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1F8CCC7-AA47-4284-B128-1CE73C71A197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1F8CCC7-AA47-4284-B128-1CE73C71A197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1F8CCC7-AA47-4284-B128-1CE73C71A197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1F8CCC7-AA47-4284-B128-1CE73C71A197}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
