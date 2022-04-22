@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
+ * @extends Factory
  */
 class ProductFactory extends Factory
 {
@@ -17,7 +17,10 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->company,
+            'price' => $this->faker->randomNumber(6),
+            'description' => $this->faker->text,
+            'amount_in_stock' => $this->faker->randomNumber(4),
         ];
     }
 }

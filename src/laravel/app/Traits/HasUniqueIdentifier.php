@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
+
 trait HasUniqueIdentifier
 {
     public static function boot(): void
