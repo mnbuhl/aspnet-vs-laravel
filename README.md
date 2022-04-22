@@ -18,7 +18,7 @@ Laravel:
 
 ```
 Initial project setup: 1.5 hours
-Configuring seed data: 0 hours
+Configuring seed data: 0.5 hours
 Data access setup: 0 hours
 Defining controllers: 0 hours
 Background jobs: 0 hours

@@ -2,22 +2,28 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderLine>
+ * @extends Factory
  */
 class OrderLineFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
+        $product = Product::all()->random()->first();
+
         return [
-            //
+            'product_id' => $product->id,
+            'quantity' => random_int(1, 10),
+            'price' => $product->price,
+            'discount' => random_int(0, 10) > 5 ? random_int(0, 100) : 0,
         ];
     }
 }

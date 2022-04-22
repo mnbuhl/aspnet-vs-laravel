@@ -2,22 +2,27 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ShippingDetails>
+ * @extends Factory
  */
 class ShippingDetailsFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
+        $shipped = random_int(0, 10) > 5;
+        $delivered = $shipped && random_int(0, 10) > 3;
+
         return [
-            //
+            'shipped_at' => $shipped ? now()->subDays(3) : null,
+            'delivered_at' => $delivered ? now() : null,
         ];
     }
 }

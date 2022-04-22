@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Address
  *
- * @property string $uuid
+ * @property string $id
  * @property string $address_line
  * @property string $city
  * @property string $zip_code
@@ -30,7 +30,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Address whereUuid($value)
  * @method static Builder|Address whereZipCode($value)
  * @mixin Eloquent
- * @property string $id
  * @method static Builder|Address whereId($value)
  */
 class Address extends Model

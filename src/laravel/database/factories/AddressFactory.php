@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
+ * @extends Factory
  */
 class AddressFactory extends Factory
 {
@@ -14,10 +14,13 @@ class AddressFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'address_line' => $this->faker->streetAddress,
+            'city' => $this->faker->city,
+            'zip_code' => $this->faker->postcode,
+            'country' => $this->faker->country,
         ];
     }
 }
