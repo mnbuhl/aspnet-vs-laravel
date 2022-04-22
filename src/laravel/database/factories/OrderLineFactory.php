@@ -17,7 +17,7 @@ class OrderLineFactory extends Factory
      */
     public function definition(): array
     {
-        $product = Product::all()->random()->first();
+        $product = Product::all()->get(random_int(0, Product::count() - 1));
 
         return [
             'product_id' => $product->id,
