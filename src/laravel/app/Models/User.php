@@ -6,8 +6,10 @@ use App\Traits\HasUniqueIdentifier;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $phone
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|Order[] $orders
+ * @property-read int|null $orders_count
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -34,4 +38,9 @@ use Illuminate\Support\Carbon;
 class User extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }

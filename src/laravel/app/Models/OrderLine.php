@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property string $product_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Order $order
+ * @property-read Product $product
  * @method static Builder|OrderLine newModelQuery()
  * @method static Builder|OrderLine newQuery()
  * @method static Builder|OrderLine query()
@@ -36,4 +39,14 @@ use Illuminate\Support\Carbon;
 class OrderLine extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

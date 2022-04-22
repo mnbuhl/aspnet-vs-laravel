@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property string $shipping_address_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Address $shippingAddress
  * @method static Builder|ShippingDetails newModelQuery()
  * @method static Builder|ShippingDetails newQuery()
  * @method static Builder|ShippingDetails query()
@@ -32,4 +34,9 @@ use Illuminate\Support\Carbon;
 class ShippingDetails extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    public function shippingAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
 }
