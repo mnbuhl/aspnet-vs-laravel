@@ -46,7 +46,10 @@ public class Program
 
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
+        if (context.Database.ProviderName != null && context.Database.ProviderName.Contains("PostgreSQL"))
+        {
+            context.Database.Migrate();
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
