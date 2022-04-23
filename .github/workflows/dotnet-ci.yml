@@ -28,4 +28,4 @@ jobs:
         run: dotnet build Orders.Api -c Release
 
       - name: Test
-        run: dotnet test Orders.Api.Test -c Release --no-build --verbosity normal
+        run: dotnet test Orders.Api.Test -c Release --verbosity normal
