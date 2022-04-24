@@ -23,5 +23,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/users/{user}', 'update')->name('users.update');
         Route::delete('/users/{user}', 'destroy')->name('users.destroy');
     });
+
+    Route::get('/demo', function () {
+        return response('Test', 200);
+    });
 });
 

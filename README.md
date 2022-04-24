@@ -23,10 +23,18 @@ Data access setup: 0 hours
 Defining controllers: 0.5 hours
 Background jobs: 0 hours
 Testing the API: 0 hours
-Deployment: 1.5 hours
+Deployment: 5 hours
 
-Total 4 hours
+Total 7.5 hours
 ```
+
+API can be experienced at:
+
+[Laravel API](https://laravel.compare.rocks/api/v1/demo)
+
+[ASP.NET API](https://dotnet.compare.rocks/api/v1/demo)
+
+<br>
 
 .NET migration commands:
 
