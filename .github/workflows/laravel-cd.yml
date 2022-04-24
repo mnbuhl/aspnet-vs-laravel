@@ -21,8 +21,10 @@ jobs:
 
           script: |
             echo "Laravel deployment started..."
-            /var/www/laravel.compare.rocks/current (php artisan down --message 'The app is being updated. Please try again in a minute.') || true
-            cp -R /var/www/laravel.compare.rocks/current /var/www/laravel.compare.rocks/previous
+            cd /var/www/laravel.compare.rocks/current 
+            (php artisan down --message 'The app is being updated. Please try again in a minute.') || true
+            cp -R . /var/www/laravel.compare.rocks/previous
+            cd ~
             git clone --branch prod-laravel https://github.com/mnbuhl/aspnet-vs-laravel.git
             cp -R aspnet-vs-laravel/src/laravel /var/www/laravel.compare.rocks/current
             cd /var/www/laravel.compare.rocks/current
