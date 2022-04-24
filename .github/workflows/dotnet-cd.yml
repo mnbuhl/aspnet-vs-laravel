@@ -2,7 +2,7 @@ name: Deploy ASP.NET Core application
 
 on:
   push:
-    branches: ['prod_dotnet']
+    branches: ['prod-dotnet']
 
 jobs:
   deploy:
