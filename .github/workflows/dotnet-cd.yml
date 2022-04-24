@@ -1,7 +1,8 @@
 name: Deploy ASP.NET Core application
 
 on:
-  push: ['prod_dotnet']
+  push:
+    branches: ['prod_dotnet']
 
   deploy:
     runs-on: ubuntu-latest
