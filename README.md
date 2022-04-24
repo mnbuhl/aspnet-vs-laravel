@@ -9,9 +9,9 @@ Data access setup: 1 hour
 Defining controllers: 6.5 hours
 Background jobs: 1 hours
 Testing the API: 3 hours
-Deployment: 1.5 hours
+Deployment: 5 hours
 
-Total 16 hours
+Total 19.5 hours
 ```
 
 Laravel:
@@ -23,9 +23,9 @@ Data access setup: 0 hours
 Defining controllers: 0.5 hours
 Background jobs: 0 hours
 Testing the API: 0 hours
-Deployment: 0 hours
+Deployment: 1.5 hours
 
-Total 0 hours
+Total 4 hours
 ```
 
 .NET migration commands:

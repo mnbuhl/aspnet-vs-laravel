@@ -1,0 +1,33 @@
+name: Build and test ASP.NET Core application
+
+on:
+  pull_request:
+    branches: ['prod-dotnet']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src/dotnet
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: prod-dotnet
+
+      - name: Setup ASP.NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build Orders.Api -c Release
+
+      - name: Test
+        run: dotnet test Orders.Api.Test -c Release
