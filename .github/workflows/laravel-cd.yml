@@ -1,0 +1,40 @@
+name: Deploy Laravel application
+
+on:
+  push:
+    branches: ['prod-laravel']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment: production
+    concurrency: production
+
+    steps:
+      - name: Deploy Laravel App
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+
+          script: |
+            echo "Laravel deployment started..."
+            cd /var/www/laravel.compare.rocks/current 
+            (php artisan down) || true
+            cp -R . /var/www/laravel.compare.rocks/previous
+            cd ~/aspnet-vs-laravel/src/laravel
+            git checkout prod-laravel && git pull
+            cp -R . /var/www/laravel.compare.rocks/current
+            cd /var/www/laravel.compare.rocks/current
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            php artisan clear-compiled
+            php artisan optimize:clear
+            php artisan optimize
+            php artisan migrate --force
+            php artisan up
+            cd ~
+            chown -R www-data:www-data /var/www/laravel.compare.rocks/current
+            service php8.1-fpm restart
+            echo "Laravel deployment successful!"

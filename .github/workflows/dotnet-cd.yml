@@ -21,13 +21,10 @@ jobs:
 
           script: |
             cp -R /var/www/dotnet.compare.rocks/current /var/www/dotnet.compare.rocks/previous
-            git clone https://github.com/mnbuhl/aspnet-vs-laravel.git
-            cd aspnet-vs-laravel
-            git checkout prod-dotnet
-            cd src/dotnet
+            cd aspnet-vs-laravel/src/dotnet
+            git checkout prod-dotnet && git pull
             dotnet publish -c Release -o /var/www/dotnet.compare.rocks/current
             chown -R www-data:www-data /var/www/dotnet.compare.rocks/current
             cd ~
-            rm -rf aspnet-vs-laravel
             systemctl restart dotnet.compare.rocks.service
             echo 'Deployment successfull'
