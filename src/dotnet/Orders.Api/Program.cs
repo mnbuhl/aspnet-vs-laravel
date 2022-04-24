@@ -21,8 +21,7 @@ public class Program
         {
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -46,6 +45,7 @@ public class Program
 
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        
         if (context.Database.ProviderName != null && context.Database.ProviderName.Contains("PostgreSQL"))
         {
             context.Database.Migrate();
