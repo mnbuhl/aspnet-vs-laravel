@@ -10,24 +10,24 @@ jobs:
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.1
 
-  defaults:
-    run:
-      working-directory: ./src/laravel
+    defaults:
+      run:
+        working-directory: ./src/laravel
 
-  steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: prod-laravel
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: prod-laravel
 
-    - name: Install composer dependencies
-      run: |
-        composer install --no-scripts
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts
 
-    - name: Prepare Laravel application
-      run: |
-        cp .env.ci .env
-        php artisan key:generate
+      - name: Prepare Laravel application
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
 
-    - name: Run tests
-      run: vendor/bin/phpunit tests/ --configuration phpunit.xml
+      - name: Run tests
+        run: vendor/bin/phpunit tests/ --configuration phpunit.xml
