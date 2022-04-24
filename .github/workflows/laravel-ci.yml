@@ -10,6 +10,8 @@ jobs:
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.1
 
+    environment: testing
+
     defaults:
       run:
         working-directory: ./src/laravel
