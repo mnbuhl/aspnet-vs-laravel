@@ -26,7 +26,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/demo', function () {
         return response()->json([
-            'message' => 'Hello World'
+            'message' => 'Hello World 1'
         ]);
     });
 });
