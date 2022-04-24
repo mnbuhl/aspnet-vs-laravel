@@ -1,0 +1,38 @@
+name: Deploy Laravel application
+
+on:
+  push:
+    branches: ['prod-laravel']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment: production
+    concurrency: production
+
+    steps:
+      - name: Deploy Laravel App
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+
+          script: |
+            echo "Laravel deployment started..."
+            /var/www/laravel.compare.rocks/current (php artisan down --message 'The app is being updated. Please try again in a minute.') || true
+            cp -R /var/www/laravel.compare.rocks/current /var/www/laravel.compare.rocks/previous
+            git clone --branch prod-laravel https://github.com/mnbuhl/aspnet-vs-laravel.git
+            cp -R aspnet-vs-laravel/src/laravel /var/www/laravel.compare.rocks/current
+            cd /var/www/laravel.compare.rocks/current
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            php artisan clear-compiled
+            php artisan optimize
+            php artisan migrate --force
+            php artisan up
+            cd ~
+            chown -R www-data:www-data /var/www/laravel.compare.rocks/current
+            service php8.1-fpm restart
+            rm -rf aspnet-vs-laravel
+            echo "Laravel deployment successful!"
