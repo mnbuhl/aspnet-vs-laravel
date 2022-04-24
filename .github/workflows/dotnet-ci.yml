@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event_name == 'pull_request' }}
 
     defaults:
       run:
@@ -36,7 +36,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.issue.push }}
+    if: ${{ github.event_name == 'push' }}
 
     environment: production
     concurrency: production
