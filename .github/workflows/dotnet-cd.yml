@@ -1,0 +1,31 @@
+name: Deploy ASP.NET Core application
+
+on:
+  push: ['prod_dotnet']
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment: production
+    concurrency: production
+
+    steps:
+      - name: Deploy ASP.NET Core App
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+
+          script: |
+            cp -R /var/www/dotnet.compare.rocks/current /var/www/dotnet.compare.rocks/previous
+            git clone https://github.com/mnbuhl/aspnet-vs-laravel.git
+            cd aspnet-vs-laravel
+            git checkout prod-dotnet
+            cd src/dotnet
+            dotnet publish -c Release -o /var/www/dotnet.compare.rocks/current
+            chown -R www-data:www-data /var/www/dotnet.compare.rocks/current
+            cd ~
+            rm -rf aspnet-vs-laravel
+            systemctl restart dotnet.compare.rocks.service
+            echo 'Deployment successfull'
