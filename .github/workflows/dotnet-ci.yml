@@ -13,9 +13,10 @@ jobs:
         working-directory: ./src/dotnet
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: prod-dotnet
 
       - name: Setup ASP.NET
         uses: actions/setup-dotnet@v1
