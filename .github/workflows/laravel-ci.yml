@@ -1,0 +1,33 @@
+name: Test Laravel application
+
+on:
+  pull_request:
+    branches: ['prod-laravel']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.1
+
+    defaults:
+      run:
+        working-directory: ./src/laravel
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts
+
+      - name: Prepare Laravel application
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+
+      - name: Run tests
+        run: vendor/bin/phpunit tests/ --configuration phpunit.xml
