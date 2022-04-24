@@ -10,6 +10,6 @@ public class DemoController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("Test");
+        return Ok("Test 2");
     }
 }
