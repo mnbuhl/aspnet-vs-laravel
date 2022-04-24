@@ -56,4 +56,5 @@ jobs:
             chown -R www-data:www-data /var/www/dotnet-app
             cd ~
             rm -rf aspnet-vs-laravel
+            systemctl restart dotnet-app.service
             echo 'Deployment successfull'
