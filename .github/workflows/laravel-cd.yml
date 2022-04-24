@@ -22,11 +22,11 @@ jobs:
           script: |
             echo "Laravel deployment started..."
             cd /var/www/laravel.compare.rocks/current 
-            (php artisan down --message 'The app is being updated. Please try again in a minute.') || true
+            (php artisan down) || true
             cp -R . /var/www/laravel.compare.rocks/previous
-            cd ~
-            git clone --branch prod-laravel https://github.com/mnbuhl/aspnet-vs-laravel.git
-            cp -R aspnet-vs-laravel/src/laravel /var/www/laravel.compare.rocks/current
+            cd ~/aspnet-vs-laravel/src/laravel
+            git checkout prod-laravel && git pull
+            cp -R . /var/www/laravel.compare.rocks/current
             cd /var/www/laravel.compare.rocks/current
             composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
             php artisan clear-compiled
@@ -37,5 +37,4 @@ jobs:
             cd ~
             chown -R www-data:www-data /var/www/laravel.compare.rocks/current
             service php8.1-fpm restart
-            rm -rf aspnet-vs-laravel
             echo "Laravel deployment successful!"
