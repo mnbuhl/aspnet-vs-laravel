@@ -20,6 +20,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
 
           script: |
+            echo "ASP.NET Core deployment started..."
             cp -R /var/www/dotnet.compare.rocks/current /var/www/dotnet.compare.rocks/previous
             cd aspnet-vs-laravel/src/dotnet
             git checkout prod-dotnet && git pull
@@ -27,4 +28,4 @@ jobs:
             chown -R www-data:www-data /var/www/dotnet.compare.rocks/current
             cd ~
             systemctl restart dotnet.compare.rocks.service
-            echo 'Deployment successfull'
+            echo "ASP.NET Core deployment successful!"
