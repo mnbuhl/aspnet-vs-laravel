@@ -24,10 +24,9 @@ class GetProductsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'page' => 'integer|min:1',
+            'pageIndex' => 'integer|min:1',
             'pageSize' => 'integer|min:1|max::50',
-            'sortBy' => 'string|in:id,name,price,quantity,created_at,updated_at',
-            'sortDirection' => 'string|in:asc,desc',
+            'sort' => 'string|in:name,-name,created_at,-created_at',
             'search' => 'string|max:255',
         ];
     }
