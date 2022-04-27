@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/users', 'store')->name('users.store');
         Route::put('/users/{user}', 'update')->name('users.update');
         Route::delete('/users/{user}', 'destroy')->name('users.destroy');
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('products.index');
     });
 
     Route::get('/demo', function () {
