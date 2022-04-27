@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         $user = User::create($request->validated());
 
-        if (!$user) {
+        if (!isset($user)) {
             Log::info("Failed to create user");
             return response()->json(['message' => 'Failed to create user'], 400);
         }
@@ -25,19 +25,14 @@ class UserController extends Controller
 
     public function show(User $user): JsonResponse
     {
-        if (!isset($user)) {
-            Log::info("User {$user} not found");
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
         return response()->json($user);
     }
 
     public function showByEmail(string $email): JsonResponse
     {
-        $user = User::whereEmail($email)->with(['orders', 'orders.orderLines'])->get();
+        $user = User::whereEmail($email)->with(['orders', 'orders.orderLines'])->first();
 
-        if (!$user) {
+        if (!isset($user)) {
             Log::info("User with email {$email} not found");
             return response()->json(['message' => 'User not found'], 404);
         }
@@ -59,7 +54,12 @@ class UserController extends Controller
 
     public function destroy(User $user): JsonResponse
     {
-        $user->delete();
+        try {
+            $user->deleteOrFail();
+        } catch (\Throwable $e) {
+            Log::error("Failed to delete user", $e->getTrace());
+            return response()->json(['message' => 'User not deleted'], 400);
+        }
 
         return response()->json(null, 204);
     }

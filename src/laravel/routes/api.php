@@ -25,9 +25,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('/users/{user}', 'destroy')->name('users.destroy');
     });
 
-    Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index')->name('products.index');
-    });
+    Route::resource('products', ProductController::class);
 
     Route::get('/demo', function () {
         return response('Test', 200);
