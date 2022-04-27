@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class GetProductsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,11 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|max:255|string',
-            'phone' => 'sometimes|max:15|string',
+            'page' => 'integer|min:1',
+            'pageSize' => 'integer|min:1|max::50',
+            'sortBy' => 'string|in:id,name,price,quantity,created_at,updated_at',
+            'sortDirection' => 'string|in:asc,desc',
+            'search' => 'string|max:255',
         ];
     }
 }

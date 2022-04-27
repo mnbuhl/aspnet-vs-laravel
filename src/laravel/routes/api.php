@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,12 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::controller(UserController::class)->group(function () {
-        Route::get('/users/{user}', 'show')->name('users.show');
         Route::get('/users/email/{user}', 'showByEmail')->name('users.showByEmail');
+        Route::get('/users/{user}', 'show')->name('users.show');
         Route::post('/users', 'store')->name('users.store');
         Route::put('/users/{user}', 'update')->name('users.update');
         Route::delete('/users/{user}', 'destroy')->name('users.destroy');
     });
+
+    Route::resource('products', ProductController::class);
 
     Route::get('/demo', function () {
         return response('Test', 200);

@@ -36,4 +36,11 @@ use Illuminate\Support\Carbon;
 class Product extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'amount_in_stock'
+    ];
 }
