@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->dateTime('shipped_at')->nullable();
             $table->dateTime('delivered_at')->nullable();
-            $table->foreignUuid('shipping_address_id')->references('id')->on('addresses');
+            $table->foreignUuid('shipping_address_id')->references('id')->on('addresses')->cascadeOnDelete();
             $table->timestamps();
         });
     }

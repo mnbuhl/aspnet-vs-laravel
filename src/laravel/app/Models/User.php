@@ -39,6 +39,12 @@ class User extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+    ];
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
