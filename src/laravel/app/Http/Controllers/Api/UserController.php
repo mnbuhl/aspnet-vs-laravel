@@ -11,14 +11,26 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    public function store(StoreUserRequest $request): JsonResponse
+    {
+        $user = User::create($request->validated());
+
+        if (!$user) {
+            Log::info("Failed to create user");
+            return response()->json(['message' => 'Failed to create user'], 400);
+        }
+
+        return response()->json($user, 201);
+    }
+
     public function show(User $user): JsonResponse
     {
         if (!isset($user)) {
             Log::info("User {$user} not found");
-            return new JsonResponse(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
-        return new JsonResponse($user);
+        return response()->json($user);
     }
 
     public function showByEmail(string $email): JsonResponse
@@ -27,22 +39,10 @@ class UserController extends Controller
 
         if (!$user) {
             Log::info("User with email {$email} not found");
-            return new JsonResponse(null, 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
-        return new JsonResponse($user);
-    }
-
-    public function store(StoreUserRequest $request): JsonResponse
-    {
-        $user = User::create($request->validated());
-
-        if (!$user) {
-            Log::info("Failed to create user");
-            return new JsonResponse('User not created', 500);
-        }
-
-        return new JsonResponse($user, 201);
+        return response()->json($user);
     }
 
     public function update(UpdateUserRequest $request, User $user): JsonResponse
@@ -51,16 +51,16 @@ class UserController extends Controller
             $user->updateOrFail($request->validated());
         } catch (\Throwable $e) {
             Log::error("Failed to update user", $e->getTrace());
-            return new JsonResponse('User not updated', 400);
+            return response()->json(['message' => 'User not updated'], 400);
         }
 
-        return new JsonResponse(null, 204);
+        return response()->json(null, 204);
     }
 
     public function destroy(User $user): JsonResponse
     {
         $user->delete();
 
-        return new JsonResponse(null, 204);
+        return response()->json(null, 204);
     }
 }

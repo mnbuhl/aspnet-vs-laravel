@@ -2,17 +2,42 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ProductsQuery;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetProductsRequest;
+use App\Http\Requests\StoreProductRequest;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(GetProductsRequest $request): JsonResponse
     {
-        $query = $request->query->all();
-        dd($query);
+        $params = new ProductsQuery($request->validated());
 
-        return new JsonResponse(null, 200);
+        $products = Product::where([
+            [function ($query) use ($params) {
+                if (isset($params->search)) {
+                    $query->where('name', 'ILIKE', "%$params->search%")
+                        ->orWhere('description', 'ILIKE', "%$params->search%");
+                }
+            }]
+        ])
+            ->orderBy($params->sortBy, $params->sortDirection)
+            ->simplePaginate($params->pageSize, ['*'], 'page', $params->page);
+
+        return response()->json($products);
+    }
+
+    public function store(StoreProductRequest $request): JsonResponse
+    {
+        $product = Product::create($request->validated());
+
+        if (!isset($product)) {
+            \Log::error('Failed to create product');
+            return response()->json(['message' => 'Failed to create product'], 400);
+        }
+
+        return response()->json($product, 201);
     }
 }
