@@ -25,8 +25,8 @@ class ProductController extends Controller
                 }
             }]
         ])
-            ->orderBy($params->sortBy, $params->sortDirection)
-            ->simplePaginate($params->pageSize, ['*'], 'page', $params->page);
+            ->orderBy($params->sort, $params->sortDirection)
+            ->simplePaginate($params->pageSize, ['*'], 'page', $params->pageIndex);
 
         return response()->json($products);
     }
