@@ -7,12 +7,14 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
     public function show(User $user): JsonResponse
     {
         if (!isset($user)) {
+            Log::info("User {$user} not found");
             return new JsonResponse(['message' => 'User not found'], 404);
         }
 
@@ -33,6 +35,10 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): JsonResponse
     {
         $user = User::create($request->validated());
+
+        if (!$user) {
+            return new JsonResponse('User not created', 500);
+        }
 
         return new JsonResponse($user, 201);
     }
