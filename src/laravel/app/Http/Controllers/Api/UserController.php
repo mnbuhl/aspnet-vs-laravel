@@ -26,6 +26,7 @@ class UserController extends Controller
         $user = User::whereEmail($email)->with(['orders', 'orders.orderLines'])->get();
 
         if (!$user) {
+            Log::info("User with email {$email} not found");
             return new JsonResponse(null, 404);
         }
 
@@ -37,6 +38,7 @@ class UserController extends Controller
         $user = User::create($request->validated());
 
         if (!$user) {
+            Log::info("Failed to create user");
             return new JsonResponse('User not created', 500);
         }
 
@@ -45,7 +47,12 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-        $user->update($request->validated());
+        try {
+            $user->updateOrFail($request->validated());
+        } catch (\Throwable $e) {
+            Log::error("Failed to update user", $e->getTrace());
+            return new JsonResponse('User not updated', 400);
+        }
 
         return new JsonResponse(null, 204);
     }
