@@ -12,6 +12,10 @@ class UserController extends Controller
 {
     public function show(User $user): JsonResponse
     {
+        if (!isset($user)) {
+            return new JsonResponse(['message' => 'User not found'], 404);
+        }
+
         return new JsonResponse($user);
     }
 
