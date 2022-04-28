@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasUniqueIdentifier;
+use Database\Factories\ShippingDetailsFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ShippingDetails whereShippingAddressId($value)
  * @method static Builder|ShippingDetails whereUpdatedAt($value)
  * @mixin Eloquent
+ * @method static ShippingDetailsFactory factory(...$parameters)
  */
 class ShippingDetails extends Model
 {

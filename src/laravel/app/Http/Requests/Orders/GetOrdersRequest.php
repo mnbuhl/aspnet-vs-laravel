@@ -11,7 +11,7 @@ class GetOrdersRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,10 +21,13 @@ class GetOrdersRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'pageIndex' => 'sometimes|integer|min:1',
+            'pageSize' => 'sometimes|integer|min:1|max::50',
+            'sort' => 'sometimes|string|in:name,-name,created_at,-created_at',
+            'userId' => 'sometimes|uuid'
         ];
     }
 }
