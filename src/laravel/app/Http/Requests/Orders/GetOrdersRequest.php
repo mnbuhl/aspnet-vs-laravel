@@ -26,7 +26,7 @@ class GetOrdersRequest extends FormRequest
         return [
             'pageIndex' => 'sometimes|integer|min:1',
             'pageSize' => 'sometimes|integer|min:1|max::50',
-            'sort' => 'sometimes|string|in:name,-name,created_at,-created_at',
+            'sort' => 'sometimes|string|in:total,-total,date,-date',
             'userId' => 'sometimes|uuid'
         ];
     }
