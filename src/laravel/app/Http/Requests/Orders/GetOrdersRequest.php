@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class GetOrdersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,10 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|max:255|string',
-            'phone' => 'sometimes|max:15|string',
+            'pageIndex' => 'sometimes|integer|min:1',
+            'pageSize' => 'sometimes|integer|min:1|max::50',
+            'sort' => 'sometimes|string|in:total,-total,date,-date',
+            'userId' => 'sometimes|uuid'
         ];
     }
 }

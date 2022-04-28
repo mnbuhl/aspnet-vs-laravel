@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ProductsQuery;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetProductsRequest;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\Products\GetProductsRequest;
+use App\Http\Requests\Products\StoreProductRequest;
+use App\Http\Requests\Products\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +26,7 @@ class ProductController extends Controller
             }]
         ])
             ->orderBy($params->sort, $params->sortDirection)
-            ->simplePaginate($params->pageSize, ['*'], 'page', $params->pageIndex);
+            ->simplePaginate($params->pageSize, ['*'], 'pageIndex', $params->pageIndex);
 
         return response()->json($products);
     }
