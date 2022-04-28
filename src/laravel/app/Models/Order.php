@@ -47,6 +47,14 @@ class Order extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
+    protected $fillable = [
+        'date',
+    ];
+
+    protected $guarded = [
+        'total'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -65,5 +73,17 @@ class Order extends Model
     public function orderLines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
+    }
+
+    public function calculateTotal(): void
+    {
+        if ($this->orderLines->isEmpty()) {
+            $this->total = 0;
+            return;
+        }
+
+        $this->total = $this->orderLines->sum(function (OrderLine $line) {
+            return $line->price * (100 - $line->discount) / 100 * $line->quantity;
+        });
     }
 }
