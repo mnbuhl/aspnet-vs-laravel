@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasUniqueIdentifier;
+use Database\Factories\AddressFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,8 +32,16 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Address whereZipCode($value)
  * @mixin Eloquent
  * @method static Builder|Address whereId($value)
+ * @method static AddressFactory factory(...$parameters)
  */
 class Address extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    protected $fillable = [
+        'address_line',
+        'city',
+        'zip_code',
+        'country',
+    ];
 }

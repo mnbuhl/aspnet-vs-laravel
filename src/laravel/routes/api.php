@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::resource('products', ProductController::class);
+
+    Route::resource('orders', OrderController::class, ['except' => ['update']]);
 
     Route::get('/demo', function () {
         return response('Test', 200);

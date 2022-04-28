@@ -21,6 +21,7 @@ class ShippingDetailsFactory extends Factory
         $delivered = $shipped && random_int(0, 10) > 3;
 
         return [
+            'carrier' => $this->faker->randomElement(['Post Nord', 'DHL', 'UPS']),
             'shipped_at' => $shipped ? now()->subDays(3) : null,
             'delivered_at' => $delivered ? now() : null,
         ];
