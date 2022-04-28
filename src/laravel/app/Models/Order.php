@@ -47,12 +47,13 @@ class Order extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
+
+
     protected $fillable = [
         'date',
-    ];
-
-    protected $guarded = [
-        'total'
+        'user_id',
+        'shipping_details_id',
+        'billing_address_id',
     ];
 
     public function user(): BelongsTo
@@ -75,15 +76,17 @@ class Order extends Model
         return $this->hasMany(OrderLine::class);
     }
 
-    public function calculateTotal(): void
+    public function calculateTotal(Collection $orderLines): Order
     {
-        if ($this->orderLines->isEmpty()) {
+        if ($orderLines->isEmpty()) {
             $this->total = 0;
-            return;
+            return $this;
         }
 
-        $this->total = $this->orderLines->sum(function (OrderLine $line) {
-            return $line->price * (100 - $line->discount) / 100 * $line->quantity;
+        $this->total = $orderLines->sum(function (OrderLine $line) {
+            return round($line->price * (100 - $line->discount) / 100 * $line->quantity);
         });
+
+        return $this;
     }
 }

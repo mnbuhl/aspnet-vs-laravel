@@ -48,12 +48,13 @@ class Product extends Model
     /**
      * @throws Exception
      */
-    public function updateQuantity(int $quantity): void
+    public function updateQuantity(int $quantity): Product
     {
         if ($this->amount_in_stock < 0) {
             throw new Exception('Product is out of stock.', 400);
         }
 
         $this->amount_in_stock -= $quantity;
+        return $this;
     }
 }

@@ -37,4 +37,11 @@ use Illuminate\Support\Carbon;
 class Address extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    protected $fillable = [
+        'address_line',
+        'city',
+        'zip_code',
+        'country',
+    ];
 }

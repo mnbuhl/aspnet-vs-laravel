@@ -37,6 +37,12 @@ class ShippingDetails extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
+    protected $fillable = [
+        'shipped_at',
+        'delivered_at',
+        'shipping_address_id',
+    ];
+
     public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class);

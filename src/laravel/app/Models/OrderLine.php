@@ -42,6 +42,13 @@ class OrderLine extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
+    protected $fillable = [
+        'price',
+        'quantity',
+        'discount',
+        'product_id',
+    ];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
