@@ -10,6 +10,7 @@ use App\Http\Requests\Products\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -20,8 +21,8 @@ class ProductController extends Controller
         $products = Product::where([
             [function ($query) use ($params) {
                 if (isset($params->search)) {
-                    $query->where('name', 'ILIKE', "%$params->search%")
-                        ->orWhere('description', 'ILIKE', "%$params->search%");
+                    $query->whereRaw("LOWER(name) LIKE '%" . Str::lower($params->search) . "%'")
+                        ->orWhereRaw("LOWER(description) LIKE '%" . Str::lower($params->search) . "%'");
                 }
             }]
         ])
