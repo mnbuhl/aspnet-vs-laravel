@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasUniqueIdentifier;
+use Database\Factories\OrderLineFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,10 +36,18 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderLine whereQuantity($value)
  * @method static Builder|OrderLine whereUpdatedAt($value)
  * @mixin Eloquent
+ * @method static OrderLineFactory factory(...$parameters)
  */
 class OrderLine extends Model
 {
     use HasFactory, HasUniqueIdentifier;
+
+    protected $fillable = [
+        'price',
+        'quantity',
+        'discount',
+        'product_id',
+    ];
 
     public function order(): BelongsTo
     {
