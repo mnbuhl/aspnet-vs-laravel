@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using HttpMessenger.Service;
+using HttpClientMessenger.Service;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +47,7 @@ public class IntegrationTest : IDisposable
         var httpClient = appFactory.CreateClient();
         httpClient.BaseAddress = new Uri("https://localhost:7016/api/v1/");
 
-        Messenger = new HttpMessenger.Service.HttpMessenger(httpClient);
+        Messenger = new HttpMessenger(httpClient);
 
         using var scope = appFactory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
