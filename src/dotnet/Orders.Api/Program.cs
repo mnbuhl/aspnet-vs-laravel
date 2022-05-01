@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Orders.Api.Jobs;
@@ -5,7 +6,6 @@ using Orders.Api.Services;
 using Orders.Application.Interfaces;
 using Orders.Infrastructure.Data;
 using Orders.Infrastructure.Repositories;
-using System.Text.Json.Serialization;
 
 namespace Orders.Api;
 
@@ -21,7 +21,7 @@ public class Program
         {
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
-        
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -37,6 +37,13 @@ public class Program
             x.ReportApiVersions = true;
         });
 
+        builder.Services.AddCors(opt => opt.AddPolicy("CorsPolicy", x =>
+            x.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithOrigins(builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>())
+        ));
+
         builder.Services.AddScoped<ICarrierService, CarrierService>();
 
         builder.Services.AddBackgroundJobs();
@@ -45,8 +52,8 @@ public class Program
 
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        
-        if (context.Database.ProviderName != null && context.Database.ProviderName.Contains("PostgreSQL"))
+
+        if (context.Database.IsNpgsql())
         {
             context.Database.Migrate();
         }
@@ -58,7 +65,13 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+
+        }
+
+        app.UseCors("DefaultPolicy");
 
         app.UseAuthorization();
 
