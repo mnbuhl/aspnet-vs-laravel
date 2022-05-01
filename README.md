@@ -21,7 +21,7 @@ Initial project setup: 1.5 hours
 Configuring seed data: 0.5 hours
 Data access setup: 0.5 hours
 Defining controllers: 6 hours
-Background jobs: 0 hours
+Background jobs: 0.5 hours
 Testing the API: 0 hours
 Deployment: 5 hours
 

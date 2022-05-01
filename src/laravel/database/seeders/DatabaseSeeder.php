@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
 
         Order::all()->each(function (Order $order) {
            $order->orderLines()->saveMany(OrderLine::factory()->count(random_int(1, 5))->make());
+           $order->calculateTotal($order->load('orderLines')->orderLines)->save();
         });
     }
 }

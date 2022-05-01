@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App;
+use App\Services\CarrierService;
+use App\Services\Interfaces\ICarrierService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        App::bind(ICarrierService::class, CarrierService::class);
     }
 
     /**
