@@ -10,7 +10,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "guid-typescript": "^1.0.9",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-timer-hook": "^1.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Order } from '../models/order';
 import { PaginatedResult } from '../models/pagination';
 
@@ -23,12 +23,27 @@ const laravelRequests = {
     delete: <T>(url: string) => axios.delete<T>(`${urls.laravel}/${url}`).then(res => res.data),
 }
 
-const Orders = {
-    get: (id: string) => dotnetRequests.get<Order>('orders/' + id)
+class Agent {
+    framework: string;
+    requests: {
+        get: <T>(url: string) => Promise<T>
+        post: <T>(url: string, body: {}) => Promise<T>
+        put: <T>(url: string, body: {}) => Promise<T>
+        delete: <T>(url: string) => Promise<T>
+    };
+
+    constructor(framework: string) {
+        this.framework = framework;
+        this.requests = framework === 'laravel' ? laravelRequests : dotnetRequests;
+    }
+
+    Orders = {
+        get: (id: string) => this.requests.get<Order>('orders/' + id)
+    };
+
+    Demo = {
+        deleteDb: () => dotnetRequests.post('demo', {}),
+    }
 }
 
-const agent = {
-    Orders
-}
-
-export default agent;
+export default Agent;

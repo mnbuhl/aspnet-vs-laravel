@@ -1,18 +1,32 @@
 <script lang="ts" setup>
-import agent from '../api/agent'
 import { ProductFactory } from '../models/product';
 import Score from './Score.vue';
+import { ref } from 'vue'
+import Agent from '../api/agent';
+import { useStopwatch } from 'vue-timer-hook'
 
-const producs = ProductFactory.create(500);
+const initiateBenchmark = async () => {
+    await dotnetBenchmark();
+}
 
-console.log(producs);
+const timer = useStopwatch(0, false);
 
-const order = await agent.Orders.get("0303d232-6c1d-4c23-88db-849663ae77e6");
-defineExpose({
-    order
-})
+function startTimer() {
+    timer.start();
+}
 
-console.log(order);
+const dotnetBenchmark = async () => {
+    const agent = new Agent('asp.net');
+    messages.value.push('Starting ASP.NET Benchmark...')
+    const products = ProductFactory.create(500);
+
+    await agent.Demo.deleteDb();
+
+    startTimer();
+    messages.value.push('Finished ASP.NET Benchmark')
+}
+
+const messages = ref(['']);
 </script>
 
 <template>
@@ -20,11 +34,15 @@ console.log(order);
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
     <div class="grid grid-cols-2 text-center">
-        <Score :framework="'ASP.NET Core 6.0'" />
-        <Score :framework="'Laravel 9'" />
+        <Score :timer="timer" :framework="'ASP.NET Core 6.0'" />
+        <Score :timer="timer" :framework="'Laravel 9'" />
     </div>
     <div class="text-center mx-auto">
-        <button>Benchmark</button>
+        <button @click="initiateBenchmark">Benchmark</button>
+    </div>
+    <div class="w-72 mx-auto">
+        <h2 class="text-center">Output</h2>
+        <p v-for="message in messages">{{ message }}</p>
     </div>
 </template>
 
