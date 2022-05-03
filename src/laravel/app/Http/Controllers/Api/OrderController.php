@@ -74,6 +74,12 @@ class OrderController extends Controller
         return response()->json($order, 201);
     }
 
+    public function show(Order $order): JsonResponse
+    {
+        $order->load('billingAddress', 'shippingDetails', 'orderLines', 'user', 'orderLines.product');
+        return response()->json($order);
+    }
+
     public function destroy(Order $order): JsonResponse
     {
         $order->load('shippingDetails', 'orderLines', 'orderLines.product');

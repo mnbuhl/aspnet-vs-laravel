@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Pagination\Paginator;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
