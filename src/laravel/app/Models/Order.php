@@ -47,8 +47,6 @@ class Order extends Model
 {
     use HasFactory, HasUniqueIdentifier;
 
-
-
     protected $fillable = [
         'date',
         'user_id',
