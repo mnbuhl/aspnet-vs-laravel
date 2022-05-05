@@ -28,5 +28,4 @@ export class ProductFactory {
 
         return products;
     }
-
 }

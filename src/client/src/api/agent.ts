@@ -1,13 +1,12 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { Order } from '../models/order';
-import { PaginatedResult } from '../models/pagination';
+import { Product } from '../models/product';
+import { User } from '../models/user';
 
 const urls = {
     dotnet: import.meta.env.VITE_API_DOTNET,
     laravel: import.meta.env.VITE_API_LARAVEL
 };
-
-const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const dotnetRequests = {
     get: <T>(url: string) => axios.get<T>(`${urls.dotnet}/${url}`).then(res => res.data),
@@ -40,6 +39,14 @@ class Agent {
     Orders = {
         get: (id: string) => this.requests.get<Order>('orders/' + id)
     };
+
+    Products = {
+        post: (body: Product) => this.requests.post<Product>('products', body),
+    }
+
+    Users = {
+        post: (body: User) => this.requests.post<User>('users', body),
+    }
 
     Demo = {
         deleteDb: () => dotnetRequests.post('demo', {}),

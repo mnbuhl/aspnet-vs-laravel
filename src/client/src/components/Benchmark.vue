@@ -1,29 +1,66 @@
 <script lang="ts" setup>
-import { ProductFactory } from '../models/product';
+import { Product, ProductFactory } from '../models/product';
 import Score from './Score.vue';
 import { ref } from 'vue'
 import Agent from '../api/agent';
-import { useStopwatch } from 'vue-timer-hook'
+import { ResUseStopwatch, useStopwatch } from 'vue-timer-hook'
+import { UserFactory } from '../models/user';
+
+const timers: ResUseStopwatch[] = [];
+
+for (let i = 0; i < 12; i++) {
+    timers.push(useStopwatch(0, false));
+}
 
 const initiateBenchmark = async () => {
     await dotnetBenchmark();
+    await laravelBenchmark();
 }
 
-const timer = useStopwatch(0, false);
+function startTimer(number: number) {
+    timers[number].start();
+}
 
-function startTimer() {
-    timer.start();
+function stopTimer(number: number) {
+    timers[number].pause();
 }
 
 const dotnetBenchmark = async () => {
     const agent = new Agent('asp.net');
     messages.value.push('Starting ASP.NET Benchmark...')
-    const products = ProductFactory.create(500);
+
+    const users = UserFactory.create(1000);
+    const products = ProductFactory.create(4000);
 
     await agent.Demo.deleteDb();
 
-    startTimer();
+    startTimer(0);
+    startTimer(1);
+    startTimer(2);
+
+    // 0 .. 1.000 post requests
+    for (let i = 0; i < users.length; i++) {
+        await agent.Users.post(users[i]);
+    }
+    stopTimer(0);
+
+    // 1.000 .. 5.000 post requests
+    for (let i = 0; i < products.length; i++) {
+        await agent.Products.post(products[i]);
+    }
+    stopTimer(1);
+
+    stopTimer(2);
+
     messages.value.push('Finished ASP.NET Benchmark')
+}
+
+const laravelBenchmark = async () => {
+    const agent = new Agent('laravel');
+    messages.value.push('Starting Laravel Benchmark...')
+
+    startTimer(6);
+    messages.value.push('Finished Laravel Benchmark')
 }
 
 const messages = ref(['']);
@@ -34,8 +71,8 @@ const messages = ref(['']);
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
     <div class="grid grid-cols-2 text-center">
-        <Score :timer="timer" :framework="'ASP.NET Core 6.0'" />
-        <Score :timer="timer" :framework="'Laravel 9'" />
+        <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
+        <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
     </div>
     <div class="text-center mx-auto">
         <button @click="initiateBenchmark">Benchmark</button>

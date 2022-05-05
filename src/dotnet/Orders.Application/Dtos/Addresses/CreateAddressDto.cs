@@ -4,6 +4,8 @@ namespace Orders.Application.Dtos.Addresses;
 
 public class CreateAddressDto
 {
+    public Guid? Id { get; set; }
+    
     [Required]
     public string AddressLine { get; set; } = string.Empty;
 
