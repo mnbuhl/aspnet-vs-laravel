@@ -65,7 +65,7 @@ for (let i = 0; i < 14; i++) {
 }
 
 const initiateBenchmark = async () => {
-    // await dotnetBenchmark();
+    await dotnetBenchmark();
     await laravelBenchmark();
 }
 
