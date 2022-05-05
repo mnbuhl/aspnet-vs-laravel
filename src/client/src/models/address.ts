@@ -17,7 +17,7 @@ export class AddressFactory {
             const address: Address = {
                 id: Guid.create().toString(),
                 addressLine: faker.address.streetAddress(),
-                zipCode: faker.address.zipCode(),
+                zipCode: faker.address.zipCode('####'),
                 city: faker.address.city(),
                 country: faker.address.country()
             }

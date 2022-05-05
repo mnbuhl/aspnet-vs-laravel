@@ -37,14 +37,17 @@ class Agent {
     }
 
     Orders = {
-        get: (id: string) => this.requests.get<Order>('orders/' + id)
+        get: (id: string) => this.requests.get<Order>('orders/' + id),
+        post: (body: Order) => this.requests.post<Order>('orders', body),
     };
 
     Products = {
+        get: (id: string) => this.requests.get<Product>('products/' + id),
         post: (body: Product) => this.requests.post<Product>('products', body),
     }
 
     Users = {
+        get: (id: string) => this.requests.get<User>('users/' + id),
         post: (body: User) => this.requests.post<User>('users', body),
     }
 

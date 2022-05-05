@@ -20,11 +20,12 @@ export interface Order {
 }
 
 export class OrderFactory {
-    static create(amount: number, user: User, products: Product[]) {
+    static create(amount: number, users: User[], products: Product[]) {
         const orders: Order[] = [];
 
         for (let i = 0; i < amount; i++) {
-            const orderLines = randomInt(1, 5);
+            const orderLines = randomInt(1, 3);
+            const user = users[randomInt(0, users.length - 1)];
 
             const order: Order = {
                 id: Guid.create().toString(),

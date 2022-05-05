@@ -5,10 +5,14 @@ import { ref } from 'vue'
 import Agent from '../api/agent';
 import { ResUseStopwatch, useStopwatch } from 'vue-timer-hook'
 import { UserFactory } from '../models/user';
+import { OrderFactory } from '../models/order';
+import { toTimeString } from '../util';
 
 const timers: ResUseStopwatch[] = [];
+const messages = ref(['']);
+const requests = ref([0, 0, 0, 0]);
 
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
 }
 
@@ -31,26 +35,67 @@ const dotnetBenchmark = async () => {
 
     const users = UserFactory.create(1000);
     const products = ProductFactory.create(4000);
+    const orders = OrderFactory.create(5000, users, products);
 
     await agent.Demo.deleteDb();
 
     startTimer(0);
     startTimer(1);
     startTimer(2);
+    startTimer(12);
 
     // 0 .. 1.000 post requests
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
+        requests.value[0]++;
     }
+
     stopTimer(0);
 
     // 1.000 .. 5.000 post requests
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
+        requests.value[0]++;
     }
+
     stopTimer(1);
 
+    // 5.000 .. 10.000 post requests
+    for (let i = 0; i < orders.length; i++) {
+        await agent.Orders.post(orders[i]);
+        requests.value[0]++;
+    }
+
     stopTimer(2);
+
+    startTimer(3);
+    startTimer(4);
+    startTimer(5);
+
+    // 0 .. 1.000 get requests
+    for (let i = 0; i < users.length; i++) {
+        await agent.Users.get(users[i].id);
+        requests.value[1]++
+    }
+
+    stopTimer(3);
+
+    // 1.000 .. 5.000 get requests
+    for (let i = 0; i < products.length; i++) {
+        await agent.Products.get(products[i].id);
+        requests.value[1]++
+    }
+
+    stopTimer(4);
+
+    // 5.000 .. 10.000 get requests
+    for (let i = 0; i < orders.length; i++) {
+        await agent.Orders.get(orders[i].id);
+        requests.value[1]++
+    }
+
+    stopTimer(5);
+    stopTimer(12);
 
     messages.value.push('Finished ASP.NET Benchmark')
 }
@@ -60,18 +105,50 @@ const laravelBenchmark = async () => {
     messages.value.push('Starting Laravel Benchmark...')
 
     startTimer(6);
+    startTimer(13);
+
+    stopTimer(6);
+    stopTimer(13);
     messages.value.push('Finished Laravel Benchmark')
 }
-
-const messages = ref(['']);
 </script>
 
 <template>
     <div class="text-center mx-auto my-4">
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
-    <div class="grid grid-cols-2 text-center">
+    <div class="grid grid-cols-3 text-center">
         <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
+        <div class="w-60 text-left mx-auto">
+            <div>
+                <p class="inline-block float-left">ASP.NET total time: </p>
+                <p class="inline-block float-right">{{ toTimeString(
+                        timers[12].minutes.value, timers[12].seconds.value)
+                }}</p>
+            </div>
+            <div>
+                <p class="inline-block float-left">ASP.NET Post requests:</p>
+                <p class="inline-block float-right">{{ requests[0] }}</p>
+            </div>
+            <div>
+                <p class="inline-block float-left">ASP.NET Get requests:</p>
+                <p class="inline-block float-right">{{ requests[1] }}</p>
+            </div>
+            <div>
+                <p class="inline-block float-left">Laravel total time: </p>
+                <p class="inline-block float-right">{{ toTimeString(
+                        timers[13].minutes.value, timers[13].seconds.value)
+                }}</p>
+            </div>
+            <div>
+                <p class="inline-block float-left">Laravel Post requests:</p>
+                <p class="inline-block float-right">{{ requests[2] }}</p>
+            </div>
+            <div>
+                <p class="inline-block float-left">Laravel Post requests:</p>
+                <p class="inline-block float-right">{{ requests[3] }}</p>
+            </div>
+        </div>
         <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
     </div>
     <div class="text-center mx-auto">

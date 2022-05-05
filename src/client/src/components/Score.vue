@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import RequestWithTimer from './RequestWithTimer.vue';
+import { toTimeString } from '../util';
 
 const props = defineProps({
     framework: String,
@@ -7,19 +8,6 @@ const props = defineProps({
         type: Array,
     }
 });
-
-function toTimeString(minutes: Number, seconds: Number): string {
-    if (minutes < 10 && seconds < 10) {
-        return `0${minutes}:0${seconds}`;
-    }
-
-    if (minutes < 10 && seconds >= 10) {
-        return `0${minutes}:${seconds}`;
-    }
-
-    return `${minutes}:${seconds}`;
-}
-
 
 </script>
 
