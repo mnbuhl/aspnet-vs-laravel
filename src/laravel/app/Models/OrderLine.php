@@ -43,6 +43,7 @@ class OrderLine extends Model
     use HasFactory, HasUniqueIdentifier;
 
     protected $fillable = [
+        'id',
         'price',
         'quantity',
         'discount',

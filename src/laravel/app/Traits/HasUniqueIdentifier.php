@@ -14,7 +14,7 @@ trait HasUniqueIdentifier
         static::creating(function (Model $model) {
             $model->setKeyType('string');
             $model->setIncrementing(false);
-            $model->setAttribute($model->getKeyName(), Uuid::uuid4());
+            $model->setAttribute($model->getKeyName(), $model->getAttribute($model->getKeyName()) ?? Uuid::uuid4());
         });
     }
 

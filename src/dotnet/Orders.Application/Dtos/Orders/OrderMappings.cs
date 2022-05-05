@@ -31,6 +31,7 @@ public static class OrderMappings
     {
         return new Order
         {
+            Id = orderDto.Id ?? Guid.NewGuid(),
             Date = orderDto.Date,
             UserId = orderDto.UserId,
             BillingAddressId = orderDto.BillingAddressId,

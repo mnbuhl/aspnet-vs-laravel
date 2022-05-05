@@ -36,7 +36,7 @@ public class Program
             x.DefaultApiVersion = new ApiVersion(1, 0);
             x.ReportApiVersions = true;
         });
-
+        
         builder.Services.AddCors(opt => opt.AddPolicy("CorsPolicy", x =>
             x.AllowAnyHeader()
                 .AllowAnyMethod()
@@ -68,10 +68,9 @@ public class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseHttpsRedirection();
-
         }
 
-        app.UseCors("DefaultPolicy");
+        app.UseCors("CorsPolicy");
 
         app.UseAuthorization();
 

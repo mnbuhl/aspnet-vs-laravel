@@ -40,6 +40,7 @@ class User extends Model
     use HasFactory, HasUniqueIdentifier;
 
     protected $fillable = [
+        'id',
         'name',
         'email',
         'phone',

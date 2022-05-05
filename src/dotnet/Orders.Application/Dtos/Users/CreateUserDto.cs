@@ -4,6 +4,8 @@ namespace Orders.Application.Dtos.Users;
 
 public class CreateUserDto
 {
+    public Guid? Id { get; set; }
+    
     [Required]
     public string Name { get; set; } = string.Empty;
 
