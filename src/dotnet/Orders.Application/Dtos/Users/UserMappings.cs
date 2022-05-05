@@ -26,6 +26,7 @@ public static class UserMappings
     {
         return new User
         {
+            Id = userDto.Id ?? Guid.NewGuid(),
             Name = userDto.Name,
             Email = userDto.Email,
             Phone = userDto.Phone
