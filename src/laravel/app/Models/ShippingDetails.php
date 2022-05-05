@@ -38,6 +38,7 @@ class ShippingDetails extends Model
     use HasFactory, HasUniqueIdentifier;
 
     protected $fillable = [
+        'id',
         'shipped_at',
         'delivered_at',
         'shipping_address_id',

@@ -7,6 +7,8 @@ namespace Orders.Application.Dtos.Orders;
 
 public class CreateOrderDto
 {
+    public Guid? Id { get; set; }
+    
     [Required]
     public DateTime Date { get; set; }
 
