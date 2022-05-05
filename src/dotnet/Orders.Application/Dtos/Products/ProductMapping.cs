@@ -23,6 +23,7 @@ public static class ProductMapping
     {
         return new Product
         {
+            Id = productDto.Id ?? Guid.NewGuid(),
             Name = productDto.Name,
             Description = productDto.Description,
             Price = productDto.Price,

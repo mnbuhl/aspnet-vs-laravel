@@ -20,11 +20,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Product::factory()->count(150)->create();
-        $users = User::factory()->count(100)->create();
+        $testing = config('app.env') === 'testing';
 
-        $users->each(function (User $user) {
-            $orderCount = random_int(0, 20);
+        Product::factory()->count($testing ? 20 : 150)->create();
+        $users = User::factory()->count($testing ? 10 : 100)->create();
+
+        $users->each(function (User $user) use ($testing) {
+            $orderCount = random_int(0, $testing ? 5 : 20);
 
             for ($i = 0; $i < $orderCount; $i++) {
                 $user->orders()->save(Order::factory()->make([
@@ -38,6 +40,7 @@ class DatabaseSeeder extends Seeder
 
         Order::all()->each(function (Order $order) {
            $order->orderLines()->saveMany(OrderLine::factory()->count(random_int(1, 5))->make());
+           $order->calculateTotal($order->load('orderLines')->orderLines)->save();
         });
     }
 }

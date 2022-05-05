@@ -39,6 +39,7 @@ class Product extends Model
     use HasFactory, HasUniqueIdentifier;
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'price',

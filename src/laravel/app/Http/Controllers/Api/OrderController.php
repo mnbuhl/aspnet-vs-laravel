@@ -41,6 +41,7 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             $order = Order::make([
+                'id' => $request->validated('id'),
                 'user_id' => $request->validated('user_id'),
                 'date' => $request->validated('date'),
             ]);
@@ -72,6 +73,12 @@ class OrderController extends Controller
         DB::commit();
 
         return response()->json($order, 201);
+    }
+
+    public function show(Order $order): JsonResponse
+    {
+        $order->load('billingAddress', 'shippingDetails', 'orderLines', 'user', 'orderLines.product');
+        return response()->json($order);
     }
 
     public function destroy(Order $order): JsonResponse

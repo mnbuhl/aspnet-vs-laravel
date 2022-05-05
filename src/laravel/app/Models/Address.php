@@ -39,6 +39,7 @@ class Address extends Model
     use HasFactory, HasUniqueIdentifier;
 
     protected $fillable = [
+        'id',
         'address_line',
         'city',
         'zip_code',

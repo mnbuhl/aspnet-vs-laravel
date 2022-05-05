@@ -9,9 +9,9 @@ Data access setup: 1 hour
 Defining controllers: 6.5 hours
 Background jobs: 1 hours
 Testing the API: 3 hours
-Deployment: 5 hours
+Deployment: 5.5 hours
 
-Total 19.5 hours
+Total 20 hours
 ```
 
 Laravel:
@@ -21,11 +21,11 @@ Initial project setup: 1.5 hours
 Configuring seed data: 0.5 hours
 Data access setup: 0.5 hours
 Defining controllers: 6 hours
-Background jobs: 0 hours
-Testing the API: 0 hours
+Background jobs: 0.5 hours
+Testing the API: 1.5 hours
 Deployment: 5 hours
 
-Total 13.5 hours
+Total 15.5 hours
 ```
 
 API can be experienced at:
