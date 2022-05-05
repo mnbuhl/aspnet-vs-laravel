@@ -20,7 +20,7 @@ export class UserFactory {
                 id: Guid.create().toString(),
                 name: faker.name.firstName() + faker.name.lastName(),
                 email: faker.internet.email(),
-                phone: faker.phone.phoneNumber(),
+                phone: faker.phone.phoneNumber('+45 #### ####'),
             }
 
             users.push(user);

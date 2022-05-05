@@ -34,6 +34,7 @@ class Agent {
     constructor(framework: string) {
         this.framework = framework;
         this.requests = framework === 'laravel' ? laravelRequests : dotnetRequests;
+        axios.defaults.headers.common['Content-Type'] = 'text/plain';
     }
 
     Orders = {
@@ -52,7 +53,7 @@ class Agent {
     }
 
     Demo = {
-        deleteDb: () => dotnetRequests.post('demo', {}),
+        deleteDb: () => this.requests.post('demo', {}),
     }
 }
 

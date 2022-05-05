@@ -32,5 +32,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/demo', function () {
         return response('Test', 200);
     });
+
+    Route::post('/demo', function () {
+        \App\Models\User::truncate();
+        \App\Models\Product::truncate();
+        \App\Models\Address::truncate();
+        \App\Models\ShippingDetails::truncate();
+
+        return response()->json(['success' => true]);
+    });
 });
 
