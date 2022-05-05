@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Order } from '../models/order';
-import { Product } from '../models/product';
-import { User } from '../models/user';
+import { Order, OrderSnake } from '../models/order';
+import { Product, ProductSnake } from '../models/product';
+import { User, UserSnake } from '../models/user';
 
 const urls = {
     dotnet: import.meta.env.VITE_API_DOTNET,
@@ -38,18 +38,18 @@ class Agent {
     }
 
     Orders = {
-        get: (id: string) => this.requests.get<Order>('orders/' + id),
-        post: (body: Order) => this.requests.post<Order>('orders', body),
+        get: (id: string) => this.requests.get<Order | OrderSnake>('orders/' + id),
+        post: (body: Order | OrderSnake) => this.requests.post<Order | OrderSnake>('orders', body),
     };
 
     Products = {
-        get: (id: string) => this.requests.get<Product>('products/' + id),
-        post: (body: Product) => this.requests.post<Product>('products', body),
+        get: (id: string) => this.requests.get<Product | ProductSnake>('products/' + id),
+        post: (body: Product | ProductSnake) => this.requests.post<Product | ProductSnake>('products', body),
     }
 
     Users = {
-        get: (id: string) => this.requests.get<User>('users/' + id),
-        post: (body: User) => this.requests.post<User>('users', body),
+        get: (id: string) => this.requests.get<User | UserSnake>('users/' + id),
+        post: (body: User | UserSnake) => this.requests.post<User | UserSnake>('users', body),
     }
 
     Demo = {

@@ -156,9 +156,9 @@ const laravelBenchmark = async () => {
 
     messages.value.push('Cleaning up database...')
 
-    const users = UserFactory.create(10);
-    const products = ProductFactory.create(10);
-    const orders = OrderFactory.create(5000, users, products);
+    const users = UserFactory.createSnake(1000);
+    const products = ProductFactory.createSnake(4000);
+    const orders = OrderFactory.createSnake(5000, users, products);
 
     await agent.Demo.deleteDb();
 

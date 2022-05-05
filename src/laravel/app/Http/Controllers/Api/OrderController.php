@@ -41,6 +41,7 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             $order = Order::make([
+                'id' => $request->validated('id'),
                 'user_id' => $request->validated('user_id'),
                 'date' => $request->validated('date'),
             ]);
