@@ -8,7 +8,7 @@
         </div>
         <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4 lg:order-2 order-first">
             <div class="text-left">
-                <h4 class="text-center">ASP.NET Core 6</h4>
+                <h4 class="text-center">ASP.NET Core 6.0</h4>
                 <div class="flex flex-1 justify-between">
                     <p>Total time: </p>
                     <p>{{ toTimeString(
@@ -24,7 +24,7 @@
                     <p>{{ requests[1] }}</p>
                 </div>
                 <div class="flex flex-1 justify-between">
-                    <p>Request per second:</p>
+                    <p>Requests per second:</p>
                     <p>{{ dotnetRps }}</p>
                 </div>
                 <h4 class="text-center mt-4">Laravel 9</h4>
@@ -43,7 +43,7 @@
                     <p>{{ requests[3] }}</p>
                 </div>
                 <div class="flex flex-1 justify-between">
-                    <p>Request per second:</p>
+                    <p>Requests per second:</p>
                     <p>{{ laravelRps }}</p>
                 </div>
             </div>
@@ -65,8 +65,7 @@
     </div>
     <div class="mb-4">
         <h2 class="text-center mt-6 mb-6">Output</h2>
-        <div
-            class="lg:w-[800px] w-4/5 lg:h-72 h-48 mx-auto border rounded-lg px-4 py-2 overflow-hidden overflow-y-auto">
+        <div class="lg:w-[800px] w-4/5 lg:h-72 h-48 mx-auto border rounded-lg px-4 py-2 overflow-auto">
             <p v-for="message in messages">{{ message }}</p>
         </div>
     </div>
