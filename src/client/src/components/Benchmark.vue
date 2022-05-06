@@ -7,7 +7,6 @@
             <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
         </div>
         <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4 lg:order-2 order-first">
-            <h3 class="mb-4">Statistics</h3>
             <div class="text-left">
                 <h4 class="text-center">ASP.NET Core 6</h4>
                 <div class="flex flex-1 justify-between">
@@ -24,6 +23,10 @@
                     <p>Get requests:</p>
                     <p>{{ requests[1] }}</p>
                 </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Request per second:</p>
+                    <p>{{ dotnetRps }}</p>
+                </div>
                 <h4 class="text-center mt-4">Laravel 9</h4>
                 <div class="flex flex-1 justify-between">
                     <p>Total time: </p>
@@ -38,6 +41,10 @@
                 <div class="flex flex-1 justify-between">
                     <p>Get requests:</p>
                     <p>{{ requests[3] }}</p>
+                </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Request per second:</p>
+                    <p>{{ laravelRps }}</p>
                 </div>
             </div>
         </div>
@@ -77,6 +84,8 @@ import { toTimeString } from '../util';
 const timers: ResUseStopwatch[] = [];
 const messages = ref(['']);
 const requests = ref([0, 0, 0, 0]);
+const dotnetRps = ref(0);
+const laravelRps = ref(0);
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
@@ -93,6 +102,17 @@ function startTimer(number: number) {
 
 function stopTimer(number: number) {
     timers[number].pause();
+}
+
+const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
+
+    setTimeout(() => {
+        if (framework === 'dotnet') {
+            dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
+        } else {
+            laravelRps.value = laravelRps.value;
+        }
+    }, 1000);
 }
 
 const clearDatabase = async () => {
@@ -129,6 +149,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[0]++;
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(0);
@@ -138,6 +159,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[0]++;
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(1);
@@ -147,6 +169,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[0]++;
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(2);
@@ -160,6 +183,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[1]++
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(3);
@@ -169,6 +193,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[1]++
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(4);
@@ -178,6 +203,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[1]++
+        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(5);
@@ -205,6 +231,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[2]++;
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(6);
@@ -214,6 +241,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[2]++;
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(7);
@@ -223,6 +251,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[2]++;
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(8);
@@ -236,6 +265,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[3]++
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(9);
@@ -245,6 +275,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[3]++
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(10);
@@ -254,6 +285,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[3]++
+        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(11);
