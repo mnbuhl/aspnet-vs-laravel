@@ -56,10 +56,12 @@
     <div class="text-center mx-auto">
         <button
             class="min-w-auto w-36 h-10 bg-blue-500 p-2 rounded-l-lg hover:bg-blue-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
-            @click="initiateBenchmark">Benchmark</button>
+            @click="initiateBenchmark" :disabled="disabled">Benchmark</button>
         <button
             class="min-w-auto w-36 h-10 bg-red-500 p-2 rounded-r-lg hover:bg-red-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
-            @click="clearDatabase">Clear Database</button>
+            :class="{ 'bg-gray-400 hover:bg-gray-400 hover:animate-none': disabled }" @click="clearDatabase"
+            :disabled="disabled">Clear
+            Database</button>
     </div>
     <div class="mb-4">
         <h2 class="text-center mt-6 mb-6">Output</h2>
@@ -86,14 +88,17 @@ const messages = ref(['']);
 const requests = ref([0, 0, 0, 0]);
 const dotnetRps = ref(0);
 const laravelRps = ref(0);
+const disabled = ref(false);
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
 }
 
 const initiateBenchmark = async () => {
+    disabled.value = true;
     await dotnetBenchmark();
     await laravelBenchmark();
+    disabled.value = false;
 }
 
 function startTimer(number: number) {
