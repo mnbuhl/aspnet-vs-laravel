@@ -13,7 +13,35 @@ import Benchmark from './components/Benchmark.vue';
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-size: 100%;
+  font-family: 'IBM Plex Sans';
+  letter-spacing: 0;
+}
+
+h1 {
+  @apply text-5xl font-bold leading-[64px];
+}
+
+h2 {
+  @apply text-[32px] font-bold leading-10;
+}
+
+h3 {
+  @apply text-xl font-bold leading-6
+}
+
+h4 {
+  @apply text-lg font-bold leading-6
+}
+
+p {
+  @apply text-base font-normal leading-8;
+}
 </style>

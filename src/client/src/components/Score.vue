@@ -12,9 +12,9 @@ const props = defineProps({
 </script>
 
 <template>
-    <div>
+    <div class="p-6">
         <h3>{{ props.framework }}</h3>
-        <h2>Write requests</h2>
+        <h4 class="mt-4">Write requests</h4>
         <div class="w-44 mx-auto">
             <RequestWithTimer :request-count="'1.000'"
                 :timer="toTimeString(props.timers[0].minutes.value, props.timers[0].seconds.value)" />
@@ -24,7 +24,7 @@ const props = defineProps({
                 :timer="toTimeString(props.timers[2].minutes.value, props.timers[2].seconds.value)" />
         </div>
 
-        <h2>Get requests</h2>
+        <h4 class="mt-4">Get requests</h4>
         <div class="w-44 mx-auto">
             <RequestWithTimer :request-count="'1.000'"
                 :timer="toTimeString(props.timers[3].minutes.value, props.timers[3].seconds.value)" />
