@@ -2,46 +2,63 @@
     <div class="text-center mx-auto my-4">
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
-    <div class="grid grid-cols-3 text-center">
-        <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
-        <div class="w-60 text-left mx-auto">
-            <div>
-                <p class="inline-block float-left">ASP.NET total time: </p>
-                <p class="inline-block float-right">{{ toTimeString(
-                        timers[12].minutes.value, timers[12].seconds.value)
-                }}</p>
-            </div>
-            <div>
-                <p class="inline-block float-left">ASP.NET Post requests:</p>
-                <p class="inline-block float-right">{{ requests[0] }}</p>
-            </div>
-            <div>
-                <p class="inline-block float-left">ASP.NET Get requests:</p>
-                <p class="inline-block float-right">{{ requests[1] }}</p>
-            </div>
-            <div>
-                <p class="inline-block float-left">Laravel total time: </p>
-                <p class="inline-block float-right">{{ toTimeString(
-                        timers[13].minutes.value, timers[13].seconds.value)
-                }}</p>
-            </div>
-            <div>
-                <p class="inline-block float-left">Laravel Post requests:</p>
-                <p class="inline-block float-right">{{ requests[2] }}</p>
-            </div>
-            <div>
-                <p class="inline-block float-left">Laravel Get requests:</p>
-                <p class="inline-block float-right">{{ requests[3] }}</p>
+    <div class="grid lg:w-[800px] w-full mx-auto lg:grid-cols-3 grid-cols-1 text-center mb-8">
+        <div class="border rounded-lg w-64 mx-auto lg:mb-0 mb-4">
+            <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
+        </div>
+        <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4">
+            <h3 class="mb-4">Statistics</h3>
+            <div class="text-left">
+                <h4 class="text-center">ASP.NET Core 6</h4>
+                <div class="flex flex-1 justify-between">
+                    <p>Total time: </p>
+                    <p>{{ toTimeString(
+                            timers[12].minutes.value, timers[12].seconds.value)
+                    }}</p>
+                </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Post requests:</p>
+                    <p>{{ requests[0] }}</p>
+                </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Get requests:</p>
+                    <p>{{ requests[1] }}</p>
+                </div>
+                <h4 class="text-center mt-4">Laravel 9</h4>
+                <div class="flex flex-1 justify-between">
+                    <p>Total time: </p>
+                    <p>{{ toTimeString(
+                            timers[13].minutes.value, timers[13].seconds.value)
+                    }}</p>
+                </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Post requests:</p>
+                    <p>{{ requests[2] }}</p>
+                </div>
+                <div class="flex flex-1 justify-between">
+                    <p>Get requests:</p>
+                    <p>{{ requests[3] }}</p>
+                </div>
             </div>
         </div>
-        <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
+
+        <div class="border rounded-lg w-64 mx-auto">
+            <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
+        </div>
     </div>
     <div class="text-center mx-auto">
-        <button @click="initiateBenchmark">Benchmark</button>
+        <button
+            class="min-w-auto w-36 h-10 bg-blue-500 p-2 rounded-l-lg hover:bg-blue-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
+            @click="initiateBenchmark">Benchmark</button>
+        <button
+            class="min-w-auto w-36 h-10 bg-red-500 p-2 rounded-r-lg hover:bg-red-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
+            @click="clearDatabase">Clear Database</button>
     </div>
-    <div class="w-72 mx-auto">
-        <h2 class="text-center">Output</h2>
-        <p v-for="message in messages">{{ message }}</p>
+    <div>
+        <h2 class="text-center mt-6 mb-6">Output</h2>
+        <div class="w-[800px] h-72 mx-auto border rounded-lg px-4 py-2">
+            <p v-for="message in messages">{{ message }}</p>
+        </div>
     </div>
 </template>
 
@@ -65,7 +82,7 @@ for (let i = 0; i < 14; i++) {
 }
 
 const initiateBenchmark = async () => {
-    await dotnetBenchmark();
+    // await dotnetBenchmark();
     await laravelBenchmark();
 }
 
@@ -77,16 +94,27 @@ function stopTimer(number: number) {
     timers[number].pause();
 }
 
-const dotnetBenchmark = async () => {
-    const agent = new Agent('asp.net');
+const clearDatabase = async () => {
+    messages.value = [];
+    messages.value.push('Clearing ASP.NET database...');
 
-    messages.value.push('Cleaning up database...')
+    let agent = new Agent('asp.net');
+    await agent.Demo.deleteDb();
+
+    messages.value.push('Clearing Laravel database...');
+
+    agent = new Agent('laravel');
+    await agent.Demo.deleteDb();
+    messages.value.push('Finished clearing databases');
+}
+
+const dotnetBenchmark = async () => {
+    messages.value = [];
+    const agent = new Agent('asp.net');
 
     const users = UserFactory.create(1000);
     const products = ProductFactory.create(4000);
     const orders = OrderFactory.create(5000, users, products);
-
-    await agent.Demo.deleteDb();
 
     messages.value.push('Starting ASP.NET Benchmark...')
 
@@ -154,13 +182,9 @@ const dotnetBenchmark = async () => {
 const laravelBenchmark = async () => {
     const agent = new Agent('laravel');
 
-    messages.value.push('Cleaning up database...')
-
     const users = UserFactory.createSnake(1000);
     const products = ProductFactory.createSnake(4000);
     const orders = OrderFactory.createSnake(5000, users, products);
-
-    await agent.Demo.deleteDb();
 
     messages.value.push('Starting Laravel Benchmark...')
 
