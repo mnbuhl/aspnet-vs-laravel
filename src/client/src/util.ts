@@ -11,5 +11,9 @@ export function toTimeString(minutes: Number, seconds: Number): string {
         return `0${minutes}:${seconds}`;
     }
 
+    if (minutes > 10 && seconds < 10) {
+        return `${minutes}:0${seconds}`;
+    }
+
     return `${minutes}:${seconds}`;
 }
