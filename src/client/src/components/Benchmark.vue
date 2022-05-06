@@ -108,8 +108,17 @@ function stopTimer(number: number) {
     timers[number].pause();
 }
 
-const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
+const promptPassword = () => {
+    const password = prompt('Enter password to clear database', '');
 
+    if (password === 'Pa$$w0rd') {
+        return true;
+    }
+
+    return false;
+}
+
+const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
     setTimeout(() => {
         if (framework === 'dotnet') {
             dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
@@ -121,6 +130,11 @@ const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel')
 
 const clearDatabase = async () => {
     messages.value = [];
+
+    if (!promptPassword()) {
+        messages.value.push('Password incorrect');
+        return;
+    }
     messages.value.push('Clearing ASP.NET database...');
 
     let agent = new Agent('asp.net');
