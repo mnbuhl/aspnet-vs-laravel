@@ -6,7 +6,7 @@ import Benchmark from './components/Benchmark.vue';
 
 <template>
   <Suspense>
-    <div class="max-w-[60%] mx-auto my-0">
+    <div class="lg:max-w-[60%] max-w-full mx-auto my-0">
       <Benchmark />
     </div>
   </Suspense>

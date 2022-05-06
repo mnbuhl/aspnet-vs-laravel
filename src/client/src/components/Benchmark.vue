@@ -3,10 +3,10 @@
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
     <div class="grid lg:w-[800px] w-full mx-auto lg:grid-cols-3 grid-cols-1 text-center mb-8">
-        <div class="border rounded-lg w-64 mx-auto lg:mb-0 mb-4">
+        <div class="border rounded-lg w-64 mx-auto lg:mb-0 mb-4 order-1">
             <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
         </div>
-        <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4">
+        <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4 lg:order-2 order-first">
             <h3 class="mb-4">Statistics</h3>
             <div class="text-left">
                 <h4 class="text-center">ASP.NET Core 6</h4>
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="border rounded-lg w-64 mx-auto">
+        <div class="border rounded-lg w-64 mx-auto order-3">
             <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
         </div>
     </div>
@@ -54,9 +54,10 @@
             class="min-w-auto w-36 h-10 bg-red-500 p-2 rounded-r-lg hover:bg-red-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
             @click="clearDatabase">Clear Database</button>
     </div>
-    <div>
+    <div class="mb-4">
         <h2 class="text-center mt-6 mb-6">Output</h2>
-        <div class="w-[800px] h-72 mx-auto border rounded-lg px-4 py-2">
+        <div
+            class="lg:w-[800px] w-4/5 lg:h-72 h-48 mx-auto border rounded-lg px-4 py-2 overflow-hidden overflow-y-auto">
             <p v-for="message in messages">{{ message }}</p>
         </div>
     </div>
@@ -124,6 +125,7 @@ const dotnetBenchmark = async () => {
     startTimer(12);
 
     // 0 .. 1.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/users');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[0]++;
@@ -132,6 +134,7 @@ const dotnetBenchmark = async () => {
     stopTimer(0);
 
     // 1.000 .. 5.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/products');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[0]++;
@@ -140,6 +143,7 @@ const dotnetBenchmark = async () => {
     stopTimer(1);
 
     // 5.000 .. 10.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/orders');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[0]++;
@@ -152,6 +156,7 @@ const dotnetBenchmark = async () => {
     startTimer(5);
 
     // 0 .. 1.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/users/{id}');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[1]++
@@ -160,6 +165,7 @@ const dotnetBenchmark = async () => {
     stopTimer(3);
 
     // 1.000 .. 5.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/products/{id}');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[1]++
@@ -168,6 +174,7 @@ const dotnetBenchmark = async () => {
     stopTimer(4);
 
     // 5.000 .. 10.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/orders/{id}');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[1]++
@@ -194,6 +201,7 @@ const laravelBenchmark = async () => {
     startTimer(13);
 
     // 0 .. 1.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/users');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[2]++;
@@ -202,6 +210,7 @@ const laravelBenchmark = async () => {
     stopTimer(6);
 
     // 1.000 .. 5.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/products');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[2]++;
@@ -210,6 +219,7 @@ const laravelBenchmark = async () => {
     stopTimer(7);
 
     // 5.000 .. 10.000 post requests
+    messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/orders');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[2]++;
@@ -222,6 +232,7 @@ const laravelBenchmark = async () => {
     startTimer(11);
 
     // 0 .. 1.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/users/{id}');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[3]++
@@ -230,6 +241,7 @@ const laravelBenchmark = async () => {
     stopTimer(9);
 
     // 1.000 .. 5.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/products/{id}');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[3]++
@@ -238,6 +250,7 @@ const laravelBenchmark = async () => {
     stopTimer(10);
 
     // 5.000 .. 10.000 get requests
+    messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/orders/{id}');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[3]++
