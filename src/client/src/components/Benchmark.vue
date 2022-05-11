@@ -95,7 +95,7 @@ for (let i = 0; i < 14; i++) {
 
 const initiateBenchmark = async () => {
     disabled.value = true;
-    // await dotnetBenchmark();
+    await dotnetBenchmark();
     await laravelBenchmark();
     disabled.value = false;
 }
