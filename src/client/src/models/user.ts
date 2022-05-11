@@ -29,7 +29,7 @@ export class UserFactory {
       const user: User = {
         id: Guid.create().toString(),
         name: firstName + ' ' + lastName,
-        email: faker.internet.email(firstName, lastName, 'compare.rocks'),
+        email: faker.internet.email(firstName + i, lastName, 'compare.rocks'),
         phone: faker.phone.phoneNumber('+45########')
       };
 
@@ -49,7 +49,7 @@ export class UserFactory {
       const user: UserSnake = {
         id: Guid.create().toString(),
         name: firstName + ' ' + lastName,
-        email: faker.internet.email(firstName, lastName, 'compare.rocks'),
+        email: faker.internet.email(firstName + i, lastName, 'compare.rocks'),
         phone: faker.phone.phoneNumber('+45########')
       };
 
