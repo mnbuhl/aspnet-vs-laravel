@@ -8,7 +8,7 @@
         </div>
         <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4 lg:order-2 order-first">
             <div class="text-left">
-                <h4 class="text-center">ASP.NET Core 6</h4>
+                <h4 class="text-center">ASP.NET Core 6.0</h4>
                 <div class="flex flex-1 justify-between">
                     <p>Total time: </p>
                     <p>{{ toTimeString(
@@ -24,7 +24,7 @@
                     <p>{{ requests[1] }}</p>
                 </div>
                 <div class="flex flex-1 justify-between">
-                    <p>Request per second:</p>
+                    <p>Requests per second:</p>
                     <p>{{ dotnetRps }}</p>
                 </div>
                 <h4 class="text-center mt-4">Laravel 9</h4>
@@ -43,7 +43,7 @@
                     <p>{{ requests[3] }}</p>
                 </div>
                 <div class="flex flex-1 justify-between">
-                    <p>Request per second:</p>
+                    <p>Requests per second:</p>
                     <p>{{ laravelRps }}</p>
                 </div>
             </div>
@@ -56,15 +56,16 @@
     <div class="text-center mx-auto">
         <button
             class="min-w-auto w-36 h-10 bg-blue-500 p-2 rounded-l-lg hover:bg-blue-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
-            @click="initiateBenchmark">Benchmark</button>
+            @click="initiateBenchmark" :disabled="disabled">Benchmark</button>
         <button
             class="min-w-auto w-36 h-10 bg-red-500 p-2 rounded-r-lg hover:bg-red-700 transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
-            @click="clearDatabase">Clear Database</button>
+            :class="{ 'bg-gray-400 hover:bg-gray-400 hover:animate-none': disabled }" @click="clearDatabase"
+            :disabled="disabled">Clear
+            Database</button>
     </div>
     <div class="mb-4">
         <h2 class="text-center mt-6 mb-6">Output</h2>
-        <div
-            class="lg:w-[800px] w-4/5 lg:h-72 h-48 mx-auto border rounded-lg px-4 py-2 overflow-hidden overflow-y-auto">
+        <div class="lg:w-[800px] w-4/5 lg:h-72 h-48 mx-auto border rounded-lg px-4 py-2 overflow-auto">
             <p v-for="message in messages">{{ message }}</p>
         </div>
     </div>
@@ -86,14 +87,17 @@ const messages = ref(['']);
 const requests = ref([0, 0, 0, 0]);
 const dotnetRps = ref(0);
 const laravelRps = ref(0);
+const disabled = ref(false);
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
 }
 
 const initiateBenchmark = async () => {
-    await dotnetBenchmark();
+    disabled.value = true;
+    // await dotnetBenchmark();
     await laravelBenchmark();
+    disabled.value = false;
 }
 
 function startTimer(number: number) {
@@ -104,19 +108,33 @@ function stopTimer(number: number) {
     timers[number].pause();
 }
 
-const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
+const promptPassword = () => {
+    const password = prompt('Enter password to clear database', '');
 
+    if (password === 'Pa$$w0rd') {
+        return true;
+    }
+
+    return false;
+}
+
+const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
     setTimeout(() => {
         if (framework === 'dotnet') {
             dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
         } else {
-            laravelRps.value = laravelRps.value;
+            laravelRps.value = (requests.value[2] + requests.value[3]) - currentValue;
         }
     }, 1000);
 }
 
 const clearDatabase = async () => {
     messages.value = [];
+
+    if (!promptPassword()) {
+        messages.value.push('Password incorrect');
+        return;
+    }
     messages.value.push('Clearing ASP.NET database...');
 
     let agent = new Agent('asp.net');
