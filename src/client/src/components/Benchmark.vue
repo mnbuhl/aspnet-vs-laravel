@@ -95,7 +95,7 @@ for (let i = 0; i < 14; i++) {
 
 const initiateBenchmark = async () => {
     disabled.value = true;
-    await dotnetBenchmark();
+    // await dotnetBenchmark();
     await laravelBenchmark();
     disabled.value = false;
 }
@@ -123,7 +123,7 @@ const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel')
         if (framework === 'dotnet') {
             dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
         } else {
-            laravelRps.value = laravelRps.value;
+            laravelRps.value = (requests.value[2] + requests.value[3]) - currentValue;
         }
     }, 1000);
 }
