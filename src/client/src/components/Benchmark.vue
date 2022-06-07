@@ -3,7 +3,7 @@
         <h1>ASP.NET vs Laravel Benchmarks</h1>
     </div>
     <div class="grid lg:w-[800px] w-full mx-auto lg:grid-cols-3 grid-cols-1 text-center mb-8">
-        <div class="border rounded-lg w-64 mx-auto lg:mb-0 mb-4 order-1">
+        <div class="border rounded-lg w-64 mx-auto lg:mb-0 mb-4 order-1" :class="(currentFramework === 'ASP.NET' ? 'border-blue-500' : '')">
             <Score :timers="timers.slice(0, 6)" :framework="'ASP.NET Core 6.0'" />
         </div>
         <div class="w-64 border rounded-lg mx-auto p-6 lg:mb-0 mb-4 lg:order-2 order-first">
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="border rounded-lg w-64 mx-auto order-3">
+        <div class="border rounded-lg w-64 mx-auto order-3" :class="(currentFramework === 'Laravel' ? 'border-blue-500' : '')">
             <Score :timers="timers.slice(6, 12)" :framework="'Laravel 9'" />
         </div>
     </div>
@@ -83,11 +83,14 @@ import { OrderFactory } from '../models/order';
 import { toTimeString } from '../util';
 
 const timers: ResUseStopwatch[] = [];
+let currentFramework = ref<'ASP.NET'|'Laravel'|undefined>(undefined);
 const messages = ref(['']);
 const requests = ref([0, 0, 0, 0]);
 const dotnetRps = ref(0);
 const laravelRps = ref(0);
 const disabled = ref(false);
+const totalDotnetRps = ref<number[]>([]);
+const totalLaravelRps = ref<number[]>([]);
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
@@ -95,8 +98,24 @@ for (let i = 0; i < 14; i++) {
 
 const initiateBenchmark = async () => {
     disabled.value = true;
+    
     await dotnetBenchmark();
+
+    setTimeout(
+        () => dotnetRps.value = Math.round(
+            totalDotnetRps.value.reduce((a, b) => a + b, 0) / totalDotnetRps.value.length
+        ), 
+        1500
+    );
+
     await laravelBenchmark();
+    setTimeout(
+        () => laravelRps.value = Math.round(
+            totalLaravelRps.value.reduce((a, b) => a + b, 0) / totalLaravelRps.value.length
+        ), 
+        1500
+    );
+
     disabled.value = false;
 }
 
@@ -121,9 +140,13 @@ const promptPassword = () => {
 const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
     setTimeout(() => {
         if (framework === 'dotnet') {
-            dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
+            const rps = (requests.value[0] + requests.value[1]) - currentValue;
+            dotnetRps.value = rps;
+            totalDotnetRps.value.push(rps);
         } else {
-            laravelRps.value = (requests.value[2] + requests.value[3]) - currentValue;
+            const rps = (requests.value[2] + requests.value[3]) - currentValue;
+            laravelRps.value = rps;
+            totalLaravelRps.value.push(rps);
         }
     }, 1000);
 }
@@ -151,18 +174,19 @@ const dotnetBenchmark = async () => {
     messages.value = [];
     const agent = new Agent('asp.net');
 
-    const users = UserFactory.create(1000);
-    const products = ProductFactory.create(4000);
-    const orders = OrderFactory.create(5000, users, products);
+    const users = UserFactory.create(500);
+    const products = ProductFactory.create(2000);
+    const orders = OrderFactory.create(2500, users, products);
 
     messages.value.push('Starting ASP.NET Benchmark...')
+    currentFramework.value = "ASP.NET";
 
     startTimer(0);
     startTimer(1);
     startTimer(2);
     startTimer(12);
 
-    // 0 .. 1.000 post requests
+    // 0 .. 500 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/users');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
@@ -172,7 +196,7 @@ const dotnetBenchmark = async () => {
 
     stopTimer(0);
 
-    // 1.000 .. 5.000 post requests
+    // 500 .. 2.500 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/products');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
@@ -182,7 +206,7 @@ const dotnetBenchmark = async () => {
 
     stopTimer(1);
 
-    // 5.000 .. 10.000 post requests
+    // 2.500 .. 5.000 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_DOTNET + '/orders');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
@@ -196,7 +220,7 @@ const dotnetBenchmark = async () => {
     startTimer(4);
     startTimer(5);
 
-    // 0 .. 1.000 get requests
+    // 0 .. 500 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/users/{id}');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
@@ -206,7 +230,7 @@ const dotnetBenchmark = async () => {
 
     stopTimer(3);
 
-    // 1.000 .. 5.000 get requests
+    // 500 .. 2.500 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/products/{id}');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
@@ -216,7 +240,7 @@ const dotnetBenchmark = async () => {
 
     stopTimer(4);
 
-    // 5.000 .. 10.000 get requests
+    // 2.500 .. 5.000 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_DOTNET + '/orders/{id}');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
@@ -227,24 +251,26 @@ const dotnetBenchmark = async () => {
     stopTimer(5);
     stopTimer(12);
 
+    currentFramework.value = undefined;
     messages.value.push('Finished ASP.NET Benchmark')
 }
 
 const laravelBenchmark = async () => {
     const agent = new Agent('laravel');
 
-    const users = UserFactory.createSnake(1000);
-    const products = ProductFactory.createSnake(4000);
-    const orders = OrderFactory.createSnake(5000, users, products);
+    const users = UserFactory.createSnake(500);
+    const products = ProductFactory.createSnake(2000);
+    const orders = OrderFactory.createSnake(2500, users, products);
 
     messages.value.push('Starting Laravel Benchmark...')
+    currentFramework.value = "Laravel";
 
     startTimer(6);
     startTimer(7);
     startTimer(8);
     startTimer(13);
 
-    // 0 .. 1.000 post requests
+    // 0 .. 500 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/users');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
@@ -254,7 +280,7 @@ const laravelBenchmark = async () => {
 
     stopTimer(6);
 
-    // 1.000 .. 5.000 post requests
+    // 500 .. 2.500 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/products');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
@@ -264,7 +290,7 @@ const laravelBenchmark = async () => {
 
     stopTimer(7);
 
-    // 5.000 .. 10.000 post requests
+    // 2.500 .. 5.000 post requests
     messages.value.push('POST: ' + import.meta.env.VITE_API_LARAVEL + '/orders');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
@@ -278,7 +304,7 @@ const laravelBenchmark = async () => {
     startTimer(10);
     startTimer(11);
 
-    // 0 .. 1.000 get requests
+    // 0 .. 500 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/users/{id}');
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
@@ -288,7 +314,7 @@ const laravelBenchmark = async () => {
 
     stopTimer(9);
 
-    // 1.000 .. 5.000 get requests
+    // 500 .. 2.500 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/products/{id}');
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
@@ -298,7 +324,7 @@ const laravelBenchmark = async () => {
 
     stopTimer(10);
 
-    // 5.000 .. 10.000 get requests
+    // 2.500 .. 5.000 get requests
     messages.value.push('GET: ' + import.meta.env.VITE_API_LARAVEL + '/orders/{id}');
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
@@ -309,6 +335,8 @@ const laravelBenchmark = async () => {
     stopTimer(11);
 
     stopTimer(13);
+
+    currentFramework.value = undefined;
     messages.value.push('Finished Laravel Benchmark')
 }
 </script>
