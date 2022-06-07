@@ -89,8 +89,8 @@ const requests = ref([0, 0, 0, 0]);
 const dotnetRps = ref(0);
 const laravelRps = ref(0);
 const disabled = ref(false);
-const totalDotnetRps = ref<number[]>([]);
-const totalLaravelRps = ref<number[]>([]);
+const totalDotnetRps: number[] = [];
+const totalLaravelRps: number[] = [];
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
@@ -103,7 +103,7 @@ const initiateBenchmark = async () => {
 
     setTimeout(
         () => dotnetRps.value = Math.round(
-            totalDotnetRps.value.reduce((a, b) => a + b, 0) / totalDotnetRps.value.length
+            totalDotnetRps.reduce((a, b) => a + b, 0) / totalDotnetRps.length
         ), 
         1500
     );
@@ -111,7 +111,7 @@ const initiateBenchmark = async () => {
     await laravelBenchmark();
     setTimeout(
         () => laravelRps.value = Math.round(
-            totalLaravelRps.value.reduce((a, b) => a + b, 0) / totalLaravelRps.value.length
+            totalLaravelRps.reduce((a, b) => a + b, 0) / totalLaravelRps.length
         ), 
         1500
     );
@@ -142,11 +142,11 @@ const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel')
         if (framework === 'dotnet') {
             const rps = (requests.value[0] + requests.value[1]) - currentValue;
             dotnetRps.value = rps;
-            totalDotnetRps.value.push(rps);
+            totalDotnetRps.push(rps);
         } else {
             const rps = (requests.value[2] + requests.value[3]) - currentValue;
             laravelRps.value = rps;
-            totalLaravelRps.value.push(rps);
+            totalLaravelRps.push(rps);
         }
     }, 1000);
 }
