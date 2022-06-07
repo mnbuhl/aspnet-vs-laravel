@@ -89,8 +89,6 @@ const requests = ref([0, 0, 0, 0]);
 const dotnetRps = ref(0);
 const laravelRps = ref(0);
 const disabled = ref(false);
-const totalDotnetRps: number[] = [];
-const totalLaravelRps: number[] = [];
 
 for (let i = 0; i < 14; i++) {
     timers.push(useStopwatch(0, false));
@@ -98,26 +96,29 @@ for (let i = 0; i < 14; i++) {
 
 const initiateBenchmark = async () => {
     disabled.value = true;
-    const interval = totalRps();
-    
+
+    const registerDotnetRps = requestPerSecond('dotnet')
     await dotnetBenchmark();
+    clearInterval(registerDotnetRps);
 
     setTimeout(
         () => dotnetRps.value = Math.round(
-            totalDotnetRps.reduce((a, b) => a + b, 0) / totalDotnetRps.length
+            (requests.value[0] + requests.value[1]) / (timers[12].minutes.value * 60 + timers[12].seconds.value)
         ), 
         1500
     );
 
+    const registerLaravelRps = requestPerSecond('laravel');
     await laravelBenchmark();
+    clearInterval(registerLaravelRps);
+
     setTimeout(
         () => laravelRps.value = Math.round(
-            totalLaravelRps.reduce((a, b) => a + b, 0) / totalLaravelRps.length
+            (requests.value[2] + requests.value[3]) / (timers[13].minutes.value * 60 + timers[13].seconds.value)
         ), 
         1500
     );
 
-    clearInterval(interval);
     disabled.value = false;
 }
 
@@ -139,24 +140,24 @@ const promptPassword = () => {
     return false;
 }
 
-const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
-    setTimeout(() => {
-        if (framework === 'dotnet') {
-            dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
-        } else {
-            laravelRps.value = (requests.value[2] + requests.value[3]) - currentValue;
-        }
-    }, 1000);
-}
-
-const totalRps = () => {
+const requestPerSecond = (framework: 'dotnet' | 'laravel') => {
     return setInterval(() => {
-        if (currentFramework.value === "ASP.NET") {
-            totalDotnetRps.push(dotnetRps.value);
-        } else if (currentFramework.value === "Laravel") {
-            totalLaravelRps.push(laravelRps.value);
+        let current = 0;
+        
+        if (framework === 'dotnet') {
+            current = (requests.value[0] + requests.value[1]);
+        } else {
+            current = (requests.value[2] + requests.value[3]);
         }
-    }, 1000);
+
+        setTimeout(() => {
+            if (framework === 'dotnet') {
+                dotnetRps.value = (requests.value[0] + requests.value[1]) - current;
+            } else {
+                laravelRps.value = (requests.value[2] + requests.value[3]) - current;
+            }
+        }, 1000);
+    }, 1000);    
 }
 
 const clearDatabase = async () => {
@@ -199,7 +200,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[0]++;
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(0);
@@ -209,7 +210,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[0]++;
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(1);
@@ -219,7 +220,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[0]++;
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(2);
@@ -233,7 +234,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[1]++
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(3);
@@ -243,7 +244,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[1]++
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(4);
@@ -253,7 +254,7 @@ const dotnetBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[1]++
-        requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
+        // requestPerSecond(requests.value[0] + requests.value[1], 'dotnet');
     }
 
     stopTimer(5);
@@ -283,7 +284,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.post(users[i]);
         requests.value[2]++;
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(6);
@@ -293,7 +294,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.post(products[i]);
         requests.value[2]++;
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(7);
@@ -303,7 +304,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.post(orders[i]);
         requests.value[2]++;
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(8);
@@ -317,7 +318,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < users.length; i++) {
         await agent.Users.get(users[i].id);
         requests.value[3]++
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(9);
@@ -327,7 +328,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < products.length; i++) {
         await agent.Products.get(products[i].id);
         requests.value[3]++
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(10);
@@ -337,7 +338,7 @@ const laravelBenchmark = async () => {
     for (let i = 0; i < orders.length; i++) {
         await agent.Orders.get(orders[i].id);
         requests.value[3]++
-        requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
+        //requestPerSecond(requests.value[2] + requests.value[3], 'laravel');
     }
 
     stopTimer(11);
