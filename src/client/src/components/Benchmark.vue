@@ -98,6 +98,7 @@ for (let i = 0; i < 14; i++) {
 
 const initiateBenchmark = async () => {
     disabled.value = true;
+    const interval = totalRps();
     
     await dotnetBenchmark();
 
@@ -116,6 +117,7 @@ const initiateBenchmark = async () => {
         1500
     );
 
+    clearInterval(interval);
     disabled.value = false;
 }
 
@@ -140,13 +142,19 @@ const promptPassword = () => {
 const requestPerSecond = (currentValue: number, framework: 'dotnet' | 'laravel') => {
     setTimeout(() => {
         if (framework === 'dotnet') {
-            const rps = (requests.value[0] + requests.value[1]) - currentValue;
-            dotnetRps.value = rps;
-            totalDotnetRps.push(rps);
+            dotnetRps.value = (requests.value[0] + requests.value[1]) - currentValue;
         } else {
-            const rps = (requests.value[2] + requests.value[3]) - currentValue;
-            laravelRps.value = rps;
-            totalLaravelRps.push(rps);
+            laravelRps.value = (requests.value[2] + requests.value[3]) - currentValue;
+        }
+    }, 1000);
+}
+
+const totalRps = () => {
+    return setInterval(() => {
+        if (currentFramework.value === "ASP.NET") {
+            totalDotnetRps.push(dotnetRps.value);
+        } else if (currentFramework.value === "Laravel") {
+            totalLaravelRps.push(laravelRps.value);
         }
     }, 1000);
 }
